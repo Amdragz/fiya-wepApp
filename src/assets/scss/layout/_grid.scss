@@ -1,0 +1,29 @@
+@use "../abstracts/variables";
+@use "../abstracts/mixins";
+
+// SCSS Class Definition
+.row {
+    @include mixins.make-grid-row;
+}
+
+.row > * {
+    --gutter-x: 1rem;
+    --gutter-y: 0;
+    flex-shrink: 0;
+    width: 100%;
+    max-width: 100%;
+    margin-top: var(--gutter-y);
+    padding-right: calc(var(--gutter-x) * 0.5);
+    padding-left: calc(var(--gutter-x) * 0.5);
+    box-sizing: border-box;
+}
+
+@include mixins.generate-column-classes("col");
+@include mixins.generate-column-classes("col", null, variables.$grid-columns);
+// Responsive column classes with breakpoints
+@each $name, $width in variables.$media-breakpoints {
+    @include mixins.media-breakpoint("min-width", $name) {
+        @include mixins.generate-column-classes("col", $name);
+        @include mixins.generate-column-classes("col", $name, variables.$grid-columns);
+    }
+}

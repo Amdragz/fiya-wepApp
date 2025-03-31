@@ -1,0 +1,10 @@
+body {
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  overscroll-behavior-y: contain; // Disable mobile refresh swipe
+
+  &.j-dialog-open {
+    overflow: hidden;
+  }
+}

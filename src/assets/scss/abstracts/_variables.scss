@@ -1,0 +1,78 @@
+@use "sass:color";
+@use "./functions";
+
+// Colors
+// - The SCSS variables normally shouldn't be used directly, use the CSS variables instead
+$white: #ffffff;
+$grey-50: #f8fafc;
+$grey-70: #dadada;
+$grey-100: #f1f5f9;
+$grey-150: #f4f5f6; // New color added here
+$grey-200: #e2e8f0;
+$grey-250: #c9c9c9;
+$grey-300: #cbd5e1;
+$grey-350: #d9d9d9;
+$grey-400: #94a3b8;
+$grey-500: #64748b;
+$grey-550: #474747; // New color added here
+$grey-600: #475569;
+$grey-700: #334155;
+$grey-800: #1e293b;
+$grey-900: #0f172a;
+$black: #000000;
+
+$blue-100: #e8f1fe;
+$blue-150: #abbed1;
+$blue-200: #e3e3e3; // New color added here
+$blue-600: #0669f2;
+$blue-800: #0551bb;
+
+$green-100: #dcfce7;
+$green-600: #16a34a;
+$green-800: #166534;
+
+$orange-100: #fef3c7;
+$orange-600: #d97706;
+$orange-800: #92400e;
+
+$red-100: #fee2e2;
+$red-600: #dc2626;
+$red-800: #991b1b;
+
+// Branding colors
+$brand-primary: #01832B;
+
+$brand-success-100:  #F1FBF8;
+$brand-success-200: #84DFC1;
+$brand-success-300:  #32C997;
+$brand-success-400: #009262;
+$brand-success-500: #1B6E53;
+$brand-success-600: #115B43;
+
+$brand-warning-100:  #FFF8EC;
+$brand-warning-200: #FFD596;
+$brand-warning-300:  #FFC670;
+$brand-warning-400: #FFB240;
+$brand-warning-500: #FFA826;
+$brand-warning-600: #E48900;
+
+$brand-danger-100:  #FFF1F0;
+$brand-danger-200: #F0857D;
+$brand-danger-300:  #FF5A4F;
+$brand-danger-400: #E02B1D;
+$brand-danger-500: #E01507;
+$brand-danger-600: #C33025;
+
+$base-shadow-color: #203346;
+
+// Breakpoints
+$media-breakpoints: (
+    "sm": 576px,
+    "md": 768px,
+    "lg": 992px,
+    "xl": 1200px,
+    "xxl": 1400px,
+);
+
+// Grid
+$grid-columns: 12;

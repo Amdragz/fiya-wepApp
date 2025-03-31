@@ -1,0 +1,10 @@
+/* stylelint-disable scss/at-rule-no-unknown */
+
+// Normalize & Sanitize
+@import-normalize "normalize/opinionated.css";
+@import-sanitize "sanitize/assets.css";
+@import-sanitize "sanitize/forms.css";
+@import-sanitize "sanitize/reduce-motion.css";
+@import-sanitize "sanitize/system-ui.css";
+@import-sanitize "sanitize/ui-monospace.css";
+@import-sanitize "sanitize/typography.css";
