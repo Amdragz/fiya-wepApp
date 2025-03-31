@@ -1,0 +1,35 @@
+@use "../abstracts/mixins";
+
+:root {
+    --container-width: 100%;
+}
+
+@include mixins.media-breakpoint("min-width", sm) {
+    :root {
+        --container-width: 576px;
+    }
+}
+
+@include mixins.media-breakpoint("min-width", md) {
+    :root {
+        --container-width: 768px;
+    }
+}
+
+@include mixins.media-breakpoint("min-width", lg) {
+    :root {
+        --container-width: 992px;
+    }
+}
+
+@include mixins.media-breakpoint("min-width", xl) {
+    :root {
+        --container-width: 1200px;
+    }
+}
+
+@include mixins.media-breakpoint("min-width", xxl) {
+    :root {
+        --container-width: 1240px;
+    }
+}

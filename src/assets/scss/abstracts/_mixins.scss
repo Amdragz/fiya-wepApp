@@ -1,0 +1,94 @@
+@use "sass:map";
+@use "sass:math";
+@use "variables";
+
+@mixin media-breakpoint($widthType, $name) {
+    $width: map.get(variables.$media-breakpoints, $name);
+    @media (#{$widthType}: $width) {
+        @content;
+    }
+}
+
+@mixin margin-padding-utilities($prefix) {
+    $spacer: 1rem;
+    @each $size,
+        $value in (0: 0, 1: math.div($spacer, 4), 2: math.div($spacer, 2), 3: $spacer, 4: $spacer * 2, 5: $spacer * 3)
+    {
+        .#{$prefix}m-#{$size} {
+            margin: $value !important;
+        }
+
+        .#{$prefix}mt-#{$size} {
+            margin-top: $value;
+        }
+
+        .#{$prefix}mb-#{$size} {
+            margin-bottom: $value;
+        }
+
+        .#{$prefix}ml-#{$size} {
+            margin-left: $value;
+        }
+
+        .#{$prefix}mr-#{$size} {
+            margin-right: $value;
+        }
+
+        .#{$prefix}p-#{$size} {
+            padding: $value !important;
+        }
+
+        .#{$prefix}pt-#{$size} {
+            padding-top: $value;
+        }
+
+        .#{$prefix}pb-#{$size} {
+            padding-bottom: $value;
+        }
+
+        .#{$prefix}pl-#{$size} {
+            padding-left: $value;
+        }
+
+        .#{$prefix}pr-#{$size} {
+            padding-right: $value;
+        }
+    }
+}
+
+// Grid layout, COL and Rows
+@mixin make-grid-row($gutter-x: 1rem, $gutter-y: 0) {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 0;
+    margin-right: calc(-1 * #{$gutter-x});
+    margin-left: calc(-1 * #{$gutter-x});
+}
+
+@mixin make-grid-column($size: false, $columns: variables.$grid-columns) {
+    @if $size {
+        flex: 0 0 auto;
+        width: math.percentage(math.div($size, $columns));
+    } @else {
+        flex: 1 1 0%;
+    }
+}
+
+@mixin generate-column-classes($prefix, $breakpoint: null, $columns: null) {
+    $col-prefix: "#{$prefix}";
+    @if $breakpoint {
+        $col-prefix: "#{$prefix}-#{$breakpoint}";
+    }
+
+    @if $columns {
+        @for $i from 1 through $columns {
+            .#{$col-prefix}-#{$i} {
+                @include make-grid-column($i);
+            }
+        }
+    } @else {
+        .#{$col-prefix} {
+            @include make-grid-column;
+        }
+    }
+}
