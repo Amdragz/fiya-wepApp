@@ -1,62 +1,93 @@
-@use "../abstracts/variables";
+@use '../abstracts/variables';
 
 :root {
-    --color-white: #{variables.$white};
-    --color-grey-50: #{variables.$grey-50};
-    --color-grey-70: #{variables.$grey-70};
-    --color-grey-100: #{variables.$grey-100};
-    --color-grey-150: #{variables.$grey-150};
-    --color-grey-200: #{variables.$grey-200};
-    --color-grey-250: #{variables.$grey-250};
-    --color-grey-300: #{variables.$grey-300};
-    --color-grey-350: #{variables.$grey-350};
-    --color-grey-400: #{variables.$grey-400};
-    --color-grey-500: #{variables.$grey-500};
-    --color-grey-550: #{variables.$grey-550};
-    --color-grey-600: #{variables.$grey-600};
-    --color-grey-700: #{variables.$grey-700};
-    --color-grey-800: #{variables.$grey-800};
-    --color-grey-900: #{variables.$grey-900};
-    --color-black: #{variables.$black};
+  --color-white: #{variables.$white};
+  --color-grey-50: #{variables.$grey-50};
+  --color-grey-70: #{variables.$grey-70};
+  --color-grey-100: #{variables.$grey-100};
+  --color-grey-150: #{variables.$grey-150};
+  --color-grey-200: #{variables.$grey-200};
+  --color-grey-250: #{variables.$grey-250};
+  --color-grey-300: #{variables.$grey-300};
+  --color-grey-350: #{variables.$grey-350};
+  --color-grey-400: #{variables.$grey-400};
+  --color-grey-500: #{variables.$grey-500};
+  --color-grey-550: #{variables.$grey-550};
+  --color-grey-600: #{variables.$grey-600};
+  --color-grey-700: #{variables.$grey-700};
+  --color-grey-800: #{variables.$grey-800};
+  --color-grey-900: #{variables.$grey-900};
+  --color-black: #{variables.$black};
 
-    --color-blue-100: #{variables.$blue-100};
-    --color-blue-150: #{variables.$blue-150};
-    --color-blue-200: #{variables.$blue-200};
-    --color-blue-600: #{variables.$blue-600};
-    --color-blue-800: #{variables.$blue-800};
+  --color-blue-100: #{variables.$blue-100};
+  --color-blue-150: #{variables.$blue-150};
+  --color-blue-200: #{variables.$blue-200};
+  --color-blue-600: #{variables.$blue-600};
+  --color-blue-800: #{variables.$blue-800};
 
-    --color-green-100: #{variables.$green-100};
-    --color-green-600: #{variables.$green-600};
-    --color-green-800: #{variables.$green-800};
+  --color-green-100: #{variables.$green-100};
+  --color-green-600: #{variables.$green-600};
+  --color-green-800: #{variables.$green-800};
 
-    --color-orange-100: #{variables.$orange-100};
-    --color-orange-600: #{variables.$orange-600};
-    --color-orange-800: #{variables.$orange-800};
+  --color-orange-100: #{variables.$orange-100};
+  --color-orange-600: #{variables.$orange-600};
+  --color-orange-800: #{variables.$orange-800};
 
-    --color-red-100: #{variables.$red-100};
-    --color-red-600: #{variables.$red-600};
-    --color-red-800: #{variables.$red-800};
+  --color-red-100: #{variables.$red-100};
+  --color-red-600: #{variables.$red-600};
+  --color-red-800: #{variables.$red-800};
 
-    --color-brand-primary: #{variables.$brand-primary};
+  --color-purple-100: #{variables.$purple-100};
+  --color-text-primary: #{variables.$color-text-primary};
+  --color-text-secondary: #{variables.$color-text-secondary};
 
-    --color-brand-success-100: #{variables.$brand-success-100};
-    --color-brand-success-200: #{variables.$brand-success-200};
-    --color-brand-success-300: #{variables.$brand-success-300};
-    --color-brand-success-400: #{variables.$brand-success-400};
-    --color-brand-success-500: #{variables.$brand-success-500};
-    --color-brand-success-600: #{variables.$brand-success-600};
+  --color-brand-primary: #{variables.$brand-primary};
+  --color-brand-primary-100: #{variables.$brand-primary-100};
+  --color-brand-primary-200: #{variables.$brand-primary-200};
+  --color-brand-primary-300: #{variables.$brand-primary-300};
+  --color-brand-primary-400: #{variables.$brand-primary-400};
+  --color-brand-primary-500: #{variables.$brand-primary-500};
+  --color-brand-primary-600: #{variables.$brand-primary-600};
+  --color-brand-primary-700: #{variables.$brand-primary-700};
+  --color-brand-primary-800: #{variables.$brand-primary-800};
+  --color-brand-primary-900: #{variables.$brand-primary-900};
 
-    --color-brand-warning-100: #{variables.$brand-warning-100};
-    --color-brand-warning-200: #{variables.$brand-warning-200};
-    --color-brand-warning-300: #{variables.$brand-warning-300};
-    --color-brand-warning-400: #{variables.$brand-warning-400};
-    --color-brand-warning-500: #{variables.$brand-warning-500};
-    --color-brand-warning-600: #{variables.$brand-warning-600};
+  --color-brand-neutral-100: #{variables.$brand-neutral-100};
+  --color-brand-neutral-200: #{variables.$brand-neutral-200};
+  --color-brand-neutral-300: #{variables.$brand-neutral-300};
+  --color-brand-neutral-400: #{variables.$brand-neutral-400};
+  --color-brand-neutral-500: #{variables.$brand-neutral-500};
+  --color-brand-neutral-600: #{variables.$brand-neutral-600};
+  --color-brand-neutral-700: #{variables.$brand-neutral-700};
+  --color-brand-neutral-800: #{variables.$brand-neutral-800};
+  --color-brand-neutral-900: #{variables.$brand-neutral-900};
+  --color-brand-neutral-1000: #{variables.$brand-neutral-1000};
 
-    --color-brand-danger-100: #{variables.$brand-danger-100};
-    --color-brand-danger-200: #{variables.$brand-danger-200};
-    --color-brand-danger-300: #{variables.$brand-danger-300};
-    --color-brand-danger-400: #{variables.$brand-danger-400};
-    --color-brand-danger-500: #{variables.$brand-danger-500};
-    --color-brand-danger-600: #{variables.$brand-danger-600};
+  --color-brand-info-100: #{variables.$brand-info-100};
+  --color-brand-info-200: #{variables.$brand-info-200};
+  --color-brand-info-300: #{variables.$brand-info-300};
+  --color-brand-info-400: #{variables.$brand-info-400};
+  --color-brand-info-500: #{variables.$brand-info-500};
+  --color-brand-info-600: #{variables.$brand-info-600};
+
+  --color-brand-success-100: #{variables.$brand-success-100};
+  --color-brand-success-200: #{variables.$brand-success-200};
+  --color-brand-success-300: #{variables.$brand-success-300};
+  --color-brand-success-400: #{variables.$brand-success-400};
+  --color-brand-success-500: #{variables.$brand-success-500};
+  --color-brand-success-600: #{variables.$brand-success-600};
+
+  --color-brand-warning-100: #{variables.$brand-warning-100};
+  --color-brand-warning-200: #{variables.$brand-warning-200};
+  --color-brand-warning-300: #{variables.$brand-warning-300};
+  --color-brand-warning-400: #{variables.$brand-warning-400};
+  --color-brand-warning-500: #{variables.$brand-warning-500};
+  --color-brand-warning-600: #{variables.$brand-warning-600};
+
+  --color-brand-danger-100: #{variables.$brand-danger-100};
+  --color-brand-danger-200: #{variables.$brand-danger-200};
+  --color-brand-danger-300: #{variables.$brand-danger-300};
+  --color-brand-danger-400: #{variables.$brand-danger-400};
+  --color-brand-danger-500: #{variables.$brand-danger-500};
+  --color-brand-danger-600: #{variables.$brand-danger-600};
 }
