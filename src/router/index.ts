@@ -1,24 +1,44 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/dashboard/HomeView.vue'
+import HomeView from '../views/dashboard/DashBoard.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: 'home',
+      name: 'Dashboard',
       component: HomeView,
       children: [
         {
-          path: 'dashBoard',
-          name: 'DashBoard',
-          component: () => import('@/views/dashboard/DashBoard.vue')
-        }
-      ]
+          path: '/',
+          name: 'MonitorStats',
+          component: () => import('@/views/dashboard/MonitorStatsPage.vue'),
+        },
+        {
+          path: '/poultry-cage',
+          name: 'PoultryCage',
+          component: () => import('@/views/dashboard/PoultryCagePage.vue'),
+        },
+        {
+          path: '/admin',
+          name: 'Admin',
+          component: () => import('@/views/dashboard/AdminPage.vue'),
+        },
+        {
+          path: '/report',
+          name: 'Report',
+          component: () => import('@/views/dashboard/ReportPage.vue'),
+        },
+        {
+          path: '/settings',
+          name: 'Settings',
+          component: () => import('@/views/dashboard/SettingsPage.vue'),
+        },
+      ],
     },
     {
       path: '/auth',
-      name: 'about',
+      name: 'Auth',
       component: () => import('../views/auth/AuthPage.vue'),
       children: [
         {

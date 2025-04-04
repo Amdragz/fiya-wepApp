@@ -34,11 +34,22 @@ const props = withDefaults(defineProps<FPageHeaderProps>(), {
 .f-page-header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1440px;
   height: 4rem;
 
     .f-container {
       display: flex;
       align-items: center;
+
+      .nav-logo-container {
+        margin-right: 5.5rem;
+      }
+
+      .nav-content {
+        width: 100%;
+      }
     }
 }
 </style>
