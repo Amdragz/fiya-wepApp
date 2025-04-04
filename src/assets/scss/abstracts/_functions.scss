@@ -1,3 +1,5 @@
+@use "sass:color"; // Import color module
+
 @function hexToRGB($hex) {
-    @return red($hex), green($hex), blue($hex);
+  @return color.channel($hex, "red"), color.channel($hex, "green"), color.channel($hex, "blue");
 }
