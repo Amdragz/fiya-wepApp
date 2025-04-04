@@ -1,17 +1,17 @@
 <script lang="ts">
 interface FPageProps {
-  showNavBar?: boolean,
+  showNavBar?: boolean
   isLoading?: boolean
 }
 </script>
 
 <script setup lang="ts">
-import FLoader from '../common/FLoader.vue';
-import FPageHeader from './FPageHeader.vue';
+import FLoader from '../common/FLoader.vue'
+import FPageHeader from './FPageHeader.vue'
 
 const props = withDefaults(defineProps<FPageProps>(), {
   showNavBar: true,
-  isLoading: false
+  isLoading: false,
 })
 </script>
 
@@ -22,11 +22,9 @@ const props = withDefaults(defineProps<FPageProps>(), {
       <FPageHeader>
         <slot name="nav-content" />
       </FPageHeader>
-      <main>
+      <main class="main-page">
         <slot />
       </main>
     </template>
   </div>
 </template>
-
-<style scoped lang="scss"></style>
