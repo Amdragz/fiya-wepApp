@@ -18,7 +18,7 @@ import { iconEyeToggle } from '@/assets/images/icons'
 const props = withDefaults(defineProps<FPasswordInputProps>(), {
   hasError: false,
 })
-const modelValue = defineModel<string>({ required: true })
+const modelValue = defineModel<string>({ required: true, default: '' })
 
 const togglePasswordVisibility = ref(false)
 const toggleVisibility = () => {

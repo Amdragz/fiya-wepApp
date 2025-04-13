@@ -27,5 +27,4 @@ export type LoginResponse = z.infer<typeof loginResponseSchema>
 export type FetchLoggedInUserResponse = z.infer<typeof fetchLoggedInUserSchema>
 
 export const loginRequest = (loginRequest: LoginRequest) => apiRequest.post<LoginResponse>('/auth/login', loginRequest)
-export const fetchLoggedInUserRequest = () => apiRequest.get<FetchLoggedInUserResponse>('/users/:id')
-
+export const fetchLoggedInUserRequest = (id: string) => apiRequest.get<FetchLoggedInUserResponse>(`/users/${id}`)
