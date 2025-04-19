@@ -141,8 +141,8 @@ const signup = async () => {
       margin: 0 auto;
 
       .logo-container {
-        width: 87px;
-        height: 87px;
+        width: 57px;
+        height: 57px;
         margin: 0 auto 1rem;
 
         img {

@@ -2,10 +2,6 @@
 interface FormData {
   password: string
 }
-
-// interface NewPasswordModalEmits {
-//   (e: 'show-new-password'): void
-// }
 </script>
 
 <script setup lang="ts">
@@ -19,7 +15,6 @@ const formData = ref<FormData>({
 })
 
 const showModal = defineModel<boolean>({ required: true })
-// const emit = defineEmits<NewPasswordModalEmits>()
 
 const closeModal = () => {
   showModal.value = false

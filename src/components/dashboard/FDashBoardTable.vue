@@ -2,7 +2,8 @@
 interface FTableProps {
   headers: string[]
   headerKeyMap?: Record<string, string>
-  tableFields: Record<string, unknown>[]
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  tableFields: Record<string, any>[]
   pageSize: number
 }
 </script>
@@ -11,40 +12,45 @@ interface FTableProps {
 import { computed, ref } from 'vue'
 import FTablePagination from './FTablePagination.vue'
 import FBtn from '../system/form/FBtn.vue'
-import FIcon from '../system/common/FIcon.vue'
-import { iconCalender } from '@/assets/images/icons'
+import VueDatePicker from '@vuepic/vue-datepicker'
+import '@vuepic/vue-datepicker/dist/main.css'
+import { getFriendlyDateLabel } from '@/utils/helper'
 
 const props = defineProps<FTableProps>()
 
 const newSearchFilter = ref<string | null>()
-const newTimeSelectFilter = ref<string | null>()
+const newTimeSelectFilter = ref<Date>()
 
 const filteredFields = computed(() => {
   let currentFields = props.tableFields
 
   if (newSearchFilter.value) {
+    console.log(newSearchFilter.value)
     currentFields = currentFields.filter((field) => {
-      const cageId = field.cageId ?? '';
-      const livestockNo = field.livestockNo ?? '';
+      const cageId = field.cage_id ?? ''
 
       return (
-        (typeof cageId === 'string' && cageId.includes(newSearchFilter.value ?? '')) ||
-        (typeof livestockNo === 'string' && livestockNo.includes(newSearchFilter.value ?? ''))
+        typeof cageId === 'string' &&
+        cageId.toLocaleLowerCase().includes(newSearchFilter.value?.toLocaleLowerCase() ?? '')
       )
     })
   }
 
   if (newTimeSelectFilter.value) {
-    currentFields = currentFields.filter((field) => {
-      const timestamp = field.timestamp ?? '';
-      return typeof timestamp === 'string' && timestamp.includes(newTimeSelectFilter.value ?? '')
+    currentFields = currentFields.filter((item) => {
+      const itemDate = new Date(item.timestamp).toDateString()
+      const selected = newTimeSelectFilter.value?.toDateString()
+      return itemDate === selected
     })
   }
 
   return currentFields
 })
 
-
+const readableDate = computed(() => {
+  if (!newTimeSelectFilter.value) return ''
+  return getFriendlyDateLabel(newTimeSelectFilter.value)
+})
 
 const totalItems = computed(() => filteredFields.value.length)
 const totalPages = computed(() => Math.ceil(totalItems.value / pageSize))
@@ -66,11 +72,11 @@ const handlePageChange = (page: number) => {
 <template>
   <div class="f-table">
     <div class="header">
-      <input type="text" placeholder="Search" />
+      <input type="text" placeholder="Search" v-model="newSearchFilter" />
       <div class="buttons">
         <button class="time">
-          <FIcon :width="20" :height="20" :icon-path="iconCalender" />
-          <p>Today</p>
+          <p>{{ readableDate }}</p>
+          <VueDatePicker v-model="newTimeSelectFilter" />
         </button>
         <FBtn color="secondary"> Export data </FBtn>
       </div>
@@ -101,7 +107,7 @@ const handlePageChange = (page: number) => {
       </tbody>
     </table>
     <FTablePagination
-      :currentPage="1"
+      :currentPage="currentPage"
       :totalPages="totalPages"
       @page-changed="handlePageChange"
       class="f-pagination"
@@ -149,7 +155,7 @@ const handlePageChange = (page: number) => {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 110px;
+        width: 225px;
         gap: 0.5rem;
         background-color: #f0f2f5;
         border: 1px solid #e4e7ec;
@@ -179,7 +185,7 @@ const handlePageChange = (page: number) => {
 
   .table {
     width: 100%;
-    font-size: .75rem;
+    font-size: 0.75rem;
     text-align: left;
     color: var(--color-brand-neutral-900);
     margin-bottom: 3rem;
@@ -215,7 +221,6 @@ const handlePageChange = (page: number) => {
       }
 
       tr {
-
         .field {
           font-weight: 400;
           padding: 0.75rem 1rem;

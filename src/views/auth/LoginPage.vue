@@ -32,6 +32,9 @@ const loginUser = async () => {
       email: formData.value.email,
       password: formData.value.password,
     })
+
+    await userStore.fetchLoggedInuser()
+
     router.push({ name: 'MonitorStats' })
   } catch (error) {
     console.error('Login error:', error)

@@ -18,6 +18,19 @@ import {
   iconSettings,
 } from '@/assets/images/icons'
 import FMenu from '../system/layout/FMenu.vue'
+
+import { useUserStore } from '@/stores/user'
+import { getNameInitials } from '@/utils/helper'
+import ProfileCard from './ProfileCard.vue'
+import { ref } from 'vue'
+
+const { user } = useUserStore()
+const nameInitial = getNameInitials(user?.name ?? '')
+const showProfileCard = ref(false)
+
+const toggleprofileCard = () => {
+  showProfileCard.value = !showProfileCard.value
+}
 </script>
 
 <template>
@@ -26,43 +39,45 @@ import FMenu from '../system/layout/FMenu.vue'
       <FMenuItem>
         <RouterLink :to="{ name: 'MonitorStats' }" class="menu-item">
           <FIcon :width="16" :height="17" :icon-path="iconMonitorStats" />
-          <p>Monitor stats</p><span class="underline"></span></RouterLink
-
-        >
+          <p>Monitor stats</p>
+          <span class="underline"></span
+        ></RouterLink>
       </FMenuItem>
       <FMenuItem>
         <RouterLink :to="{ name: 'PoultryCage' }" class="menu-item">
           <FIcon :width="16" :height="17" :icon-path="iconPoultryCage" />
-          <p>Poultry cage</p><span class="underline"></span></RouterLink
-
-        >
+          <p>Poultry cage</p>
+          <span class="underline"></span
+        ></RouterLink>
       </FMenuItem>
       <FMenuItem>
         <RouterLink :to="{ name: 'Admin' }" class="menu-item">
           <FIcon :width="16" :height="17" :icon-path="iconAdmin" />
-          <p>Admin</p><span class="underline"></span></RouterLink
-
-        >
+          <p>Admin</p>
+          <span class="underline"></span
+        ></RouterLink>
       </FMenuItem>
       <FMenuItem>
         <RouterLink :to="{ name: 'Report' }" class="menu-item">
           <FIcon :width="16" :height="17" :icon-path="iconReport" />
-          <p>Report</p><span class="underline"></span></RouterLink
-
-        >
+          <p>Report</p>
+          <span class="underline"></span
+        ></RouterLink>
       </FMenuItem>
       <FMenuItem>
         <RouterLink :to="{ name: 'Settings' }" class="menu-item">
           <FIcon :width="16" :height="17" :icon-path="iconSettings" />
-          <p>Settings</p><span class="underline"></span></RouterLink
-
-        >
+          <p>Settings</p>
+          <span class="underline"></span
+        ></RouterLink>
       </FMenuItem>
     </div>
     <div class="profile">
       <FIcon :width="20" :height="20" :icon-path="iconNotification" />
-      <div class="avatar">J</div>
-      <p class="name">John doe</p>
+      <div @click="toggleprofileCard" class="avatar">{{ nameInitial }}</div>
+      <p @click="toggleprofileCard" class="name">{{ user?.name }}</p>
+
+      <ProfileCard v-bind:model-value="showProfileCard"/>
     </div>
   </FMenu>
 </template>
@@ -118,8 +133,7 @@ import FMenu from '../system/layout/FMenu.vue'
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 100%;
-    max-width: 137px;
+    position: relative;
 
     .f-icon {
       stroke: var(--color-text-primary);
@@ -143,12 +157,14 @@ import FMenu from '../system/layout/FMenu.vue'
       font-weight: 600;
       margin-left: 1.5rem;
       margin-right: 0.5rem;
+      cursor: pointer;
     }
 
     .name {
       font-size: 0.825rem;
       font-weight: 400;
       white-space: nowrap;
+      cursor: pointer;
     }
   }
 
