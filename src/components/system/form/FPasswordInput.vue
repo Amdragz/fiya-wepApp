@@ -16,7 +16,11 @@ import FIcon from '../common/FIcon.vue'
 import { iconEyeToggle } from '@/assets/images/icons'
 
 const props = withDefaults(defineProps<FPasswordInputProps>(), {
+  class: undefined,
+  label: undefined,
   hasError: false,
+  errorMessage: undefined,
+  placeholder: undefined
 })
 const modelValue = defineModel<string>({ required: true, default: '' })
 

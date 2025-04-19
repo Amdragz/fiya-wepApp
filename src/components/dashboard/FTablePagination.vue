@@ -23,9 +23,9 @@ const changePage = (page: number) => {
   <div class="f-pagination">
     <button @click="changePage(currentPage - 1)" :disabled="currentPage === 1" class="page-button">
       <FIcon
-        icon-path="M9.3 13L5.66938 8.76428C5.28419 8.31489 5.28419 7.65177 5.66938 7.20238L9.3 2.96667"
-        :width="16"
-        :height="16"
+        icon-path="M6.41433 6.616L0.966328 4.168V2.896L6.41433 0.448V1.456L1.63833 3.592V3.472L6.41433 5.608V6.616Z"
+        :width="7"
+        :height="7"
         class="icon"
       />
     </button>
@@ -45,9 +45,9 @@ const changePage = (page: number) => {
       class="page-button"
     >
       <FIcon
-        icon-path="M6.7 3L10.3306 7.23572C10.7158 7.6851 10.7158 8.34823 10.3306 8.79762L6.7 13.0333"
-        :width="16"
-        :height="16"
+        icon-path="M0.0863281 6.616V5.608L4.86233 3.472V3.592L0.0863281 1.456V0.448L5.53433 2.896V4.168L0.0863281 6.616Z"
+        :width="6"
+        :height="7"
         class="icon"
       />
     </button>
@@ -62,28 +62,28 @@ const changePage = (page: number) => {
   gap: 0.5rem;
 
   .page-button {
-    width: 2rem;
-    height: 2rem;
+    width: 1.5rem;
+    height: 1.5rem;
     border-radius: 0.25rem;
     border: none;
     background-color: transparent;
     cursor: pointer;
+    background-color: #F7F9FC;
 
-    .icon {
-      fill: none;
-      stroke:  var(--color-brand-neutral-900);
-      stroke-width: 1.1;
-      stroke-linecap: round;
-    }
+    // .icon {
+    //   fill: none;
+    //   stroke:  var(--color-brand-neutral-900);
+    //   stroke-width: 1.1;
+    //   stroke-linecap: round;
+    // }
 
     &:disabled {
-      background-color:  var(--color-blue-200);
       cursor: not-allowed;
     }
   }
 
   .page-button.active {
-    background-color:  var(--color-brand-primary-400);
+    background-color:  var(--color-brand-primary);
     color: var(--color-white);
   }
 }

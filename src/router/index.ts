@@ -1,5 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/dashboard/DashBoard.vue'
+import { useUserStore } from '@/stores/user'
+import { storeToRefs } from 'pinia'
+import { hasVisited, storeVisitedState } from '@/utils/storage'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -7,6 +10,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'Dashboard',
+      meta: { requiresAuth: true },
       component: HomeView,
       children: [
         {
@@ -54,6 +58,26 @@ const router = createRouter({
       ],
     },
   ],
+})
+
+router.beforeEach(async (to, _) => {
+  if (to.meta.requiresAuth) {
+    const userStore = useUserStore()
+    const { authenticating, isAuthenticated } = storeToRefs(userStore)
+    const { fetchLoggedInuser } = userStore
+    if (!isAuthenticated.value) {
+      try {
+        authenticating.value = true
+        await fetchLoggedInuser()
+      } catch (error) {
+        if (!hasVisited()) storeVisitedState()
+        console.log(error)
+        return { name: 'AuthLogin' }
+      } finally {
+        authenticating.value = false
+      }
+    }
+  }
 })
 
 export default router

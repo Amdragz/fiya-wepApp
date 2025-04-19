@@ -167,8 +167,9 @@ const props = withDefaults(defineProps<FBtnProps>(), {
 
     &.secondary {
       &:hover {
-        border-color: var(--color-white);
-        background-color: var(--color-white);
+        // border-color: var(--color-white);
+        box-shadow: 4px 4px 10px var(--color-brand-info-100);
+        background-color: var(--color-brand-info-100);
       }
     }
   }
