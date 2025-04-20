@@ -66,6 +66,7 @@ const logoutUser = async () => {
 .f-profile-card {
   border-radius: 0.825rem;
   background-color: var(--color-brand-neutral-400);
+  z-index: 100;
   padding: 0 2rem;
   position: absolute;
   top: 100%;

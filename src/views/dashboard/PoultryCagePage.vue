@@ -1,9 +1,15 @@
 <script lang="ts">
-interface NewCageFormData {
-  cageId: string
-  noOfLivestock: string
-  assignedMonitorId: string
-}
+// interface NewCageFormData {
+//   cage_id: string
+//   livestock_no: string
+//   assigned_monitor: string
+// }
+
+const FormSchema = z.object({
+  cage_id: z.string().min(1, { message: 'Cage id is required' }),
+  livestock_no: z.number().min(1, { message: 'You must have atleast one livestock' }),
+  assigned_monitor: z.string().min(1, { message: ' Assigned monitor is required' }),
+})
 </script>
 
 <script setup lang="ts">
@@ -16,9 +22,36 @@ import FBtn from '@/components/system/form/FBtn.vue'
 import { useSpmStore } from '@/stores/spm'
 import { storeToRefs } from 'pinia'
 import { formatToHMSdate } from '@/utils/helper'
+import { z } from 'zod'
+import { useZodForm } from '@/composables/useZodForm'
 
 const spmStore = useSpmStore()
+const { addNewCage } = spmStore
 const { cageInfoList } = storeToRefs(spmStore)
+
+const { formData, errors, validateForm, debouncedHandleChange } = useZodForm<typeof FormSchema.shape>(FormSchema)
+const isLoading = ref(false)
+
+const addNewUserCage = async () => {
+  isLoading.value = true
+  const isValid = validateForm()
+
+  if (!isValid) return
+
+  try {
+    await addNewCage({
+      cage_id: formData.value.cage_id,
+      livestock_no: formData.value.livestock_no,
+      assigned_monitor: formData.value.assigned_monitor,
+    })
+    console.log("Success")
+  } catch (error) {
+    console.log(error)
+    isLoading.value = false
+  } finally {
+    isLoading.value = false
+  }
+}
 
 const fieldHeader = [
   'Cage ID',
@@ -35,7 +68,7 @@ const headerKeyMap: Record<string, string> = {
   'Assigned monitor': 'assignedMonitor',
   'Date added': 'dateAdded',
   'Last updated': 'lastUpdated',
-  'actions': 'actions',
+  actions: 'actions',
 }
 
 const tableFields = computed(() => {
@@ -52,12 +85,6 @@ const tableFields = computed(() => {
   })
 
   return tableFields
-})
-
-const cageFormData = ref<NewCageFormData>({
-  cageId: '',
-  noOfLivestock: '',
-  assignedMonitorId: '',
 })
 </script>
 
@@ -97,7 +124,7 @@ const cageFormData = ref<NewCageFormData>({
       </div>
 
       <div class="form-container">
-        <form>
+        <form action="" @submit.prevent="addNewUserCage">
           <div class="header">
             <p class="title">Add new cage</p>
             <p class="subtitle">Register a new cage to track health</p>
@@ -105,22 +132,31 @@ const cageFormData = ref<NewCageFormData>({
 
           <div class="body">
             <FInput
-              v-model:model-value="cageFormData.cageId"
+              v-model:model-value="formData.cage_id"
               label="Cage ID"
               placeholder="Enter ID"
+              @input="debouncedHandleChange($event, 'cage_id')"
+              :has-error="!!errors.cage_id"
+              :error-message="errors.cage_id"
             />
             <FInput
-              v-model:model-value="cageFormData.noOfLivestock"
+              v-model.number.trim="formData.livestock_no"
               label="No of live stock"
               placeholder="1"
+              type="number"
+              @input="debouncedHandleChange($event, 'livestock_no')"
+              :has-error="!!errors.livestock_no"
+              :error-message="errors.livestock_no"
             />
             <FInput
-              v-model:model-value="cageFormData.cageId"
+              v-model:model-value="formData.assigned_monitor"
               label="Assigned monitor ID"
               placeholder="Enter ID"
+              @input="debouncedHandleChange($event, 'assigned_monitor')"
+              :has-error="!!errors.assigned_monitor"
+              :error-message="errors.assigned_monitor"
             />
-
-            <FBtn size="lg">Add new cage</FBtn>
+            <FBtn size="lg" type="submit" :loading="isLoading">Add new cage</FBtn>
           </div>
         </form>
       </div>

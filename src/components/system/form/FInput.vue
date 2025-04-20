@@ -29,7 +29,8 @@ const props = withDefaults(defineProps<FInputProps>(), {
   showSearchIcon: false
 })
 
-const modelValue = defineModel<string>({ required: true, default: '' })
+
+const modelValue = defineModel({ required: true })
 const fInputClass = computed(() => (props.hasError ? `${props.class} is-invalid` : props.class))
 </script>
 
