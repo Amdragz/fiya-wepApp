@@ -4,7 +4,8 @@ interface FTableProps {
   headerKeyMap?: Record<string, string>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   tableFields: Record<string, any>[]
-  pageSize: number
+  pageSize: number,
+  showTimeFilter?: boolean,
 }
 </script>
 
@@ -74,7 +75,7 @@ const handlePageChange = (page: number) => {
     <div class="header">
       <input type="text" placeholder="Search" v-model="newSearchFilter" />
       <div class="buttons">
-        <button class="time">
+        <button v-if="props.showTimeFilter" class="time">
           <p>{{ readableDate }}</p>
           <VueDatePicker v-model="newTimeSelectFilter" />
         </button>

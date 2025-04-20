@@ -59,7 +59,6 @@ const validateField = (fieldName: keyof FormData) => {
 }
 
 const handleChange = useDebounceFn((e: Event, fieldName: keyof FormData) => {
-  const target = e.target as HTMLInputElement
   validateField(fieldName)
 }, 500)
 

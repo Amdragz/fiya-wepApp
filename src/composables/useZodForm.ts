@@ -41,8 +41,6 @@ export function useZodForm<T extends z.ZodRawShape>(schema: z.ZodObject<T>) {
   }
 
   function handleChange(e: Event, fieldName: keyof SchemaType) {
-    const target = e.target as HTMLInputElement
-    formData.value[fieldName] = target.value
     validateField(fieldName)
   }
 

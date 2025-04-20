@@ -192,6 +192,7 @@ const headerKeyMap: Record<string, string> = {
         :header-key-map="headerKeyMap"
         :page-size="10"
         :table-fields="tableFields"
+        show-time-filter
       >
         <template #field="{ field, colIndex }">
           <span v-if="colIndex === 0">
