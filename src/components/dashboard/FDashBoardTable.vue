@@ -16,11 +16,13 @@ import FBtn from '../system/form/FBtn.vue'
 import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 import { getFriendlyDateLabel } from '@/utils/helper'
+import { useSpmStore } from '@/stores/spm'
 
 const props = defineProps<FTableProps>()
 
 const newSearchFilter = ref<string | null>()
 const newTimeSelectFilter = ref<Date>()
+const { downloadCageInfoInCsvFormat } = useSpmStore()
 
 const filteredFields = computed(() => {
   let currentFields = props.tableFields
@@ -68,6 +70,20 @@ const paginatedFields = computed(() => {
 const handlePageChange = (page: number) => {
   currentPage.value = page
 }
+
+const isExportingCageInfo = ref(false);
+const userDownloadCageInfoInCsv = async () => {
+  isExportingCageInfo.value = true
+  try {
+    await downloadCageInfoInCsvFormat()
+    console.log("downloaded")
+  } catch(error) {
+    console.log(error)
+    isExportingCageInfo.value = false
+  } finally {
+    isExportingCageInfo.value = false
+  }
+}
 </script>
 
 <template>
@@ -79,7 +95,10 @@ const handlePageChange = (page: number) => {
           <p>{{ readableDate }}</p>
           <VueDatePicker v-model="newTimeSelectFilter" />
         </button>
-        <FBtn color="secondary"> Export data </FBtn>
+        <FBtn @click="userDownloadCageInfoInCsv" color="secondary">
+          <span v-if="isExportingCageInfo"> Downloading...</span>
+          <span v-else> Export data</span>
+        </FBtn>
       </div>
     </div>
     <table class="table">

@@ -19,6 +19,7 @@ type TableFields = {
   coccidiosis: number
   newcastle: number
   salmonella: number
+  health_score: number,
   timestamp: string
   created_at: string
   updated_at: string
@@ -45,6 +46,7 @@ import { formatToHMS } from '@/utils/helper'
 const spmStore = useSpmStore()
 const isLoading = ref<boolean>(false)
 const { cageInfoList } = storeToRefs(spmStore)
+const { cageHealthInfo } = spmStore
 
 onMounted(() => {
   fetchUsersCageInfo()
@@ -77,6 +79,7 @@ function flattenObjectRecognition(obj: CageInfo): TableFields {
     coccidiosis: obj.object_recognition.coccidiosis,
     newcastle: obj.object_recognition.newcastle,
     salmonella: obj.object_recognition.salmonella,
+    health_score: obj.object_recognition.healthy,
     timestamp: obj.timestamp,
     created_at: obj.created_at,
     updated_at: obj.updated_at,
@@ -138,20 +141,22 @@ const fieldHeader = [
   'Coccidiosis',
   'Newcastle',
   'Salmonella',
+  'Health score'
 ]
 
 const headerKeyMap: Record<string, string> = {
   'Cage ID': 'cage_id',
-  Timestamp: 'timestamp',
+  'Timestamp': 'timestamp',
   'Livestock no': 'livestock_no',
-  Temperature: 'temperature',
-  Humidity: 'humidity',
-  Pressure: 'pressure',
-  Ammonia: 'ammonia',
-  CO2: 'co2',
-  Coccidiosis: 'coccidiosis',
-  Newcastle: 'newcastle',
-  Salmonella: 'salmonella',
+  'Temperature': 'temperature',
+  'Humidity': 'humidity',
+  'Pressure': 'pressure',
+  'Ammonia': 'ammonia',
+  'CO2': 'co2',
+  'Coccidiosis': 'coccidiosis',
+  'Newcastle': 'newcastle',
+  'Salmonella': 'salmonella',
+  'Health score': 'health_score'
 }
 </script>
 
@@ -159,11 +164,11 @@ const headerKeyMap: Record<string, string> = {
   <div class="monitor-stats-page">
     <div class="status-bar">
       <div class="status">
-        <p>Health score: 40%</p>
+        <p>Health score: {{ cageHealthInfo.healthy }}%</p>
         <div class="divider"></div>
-        <p>Unhealthy score: 60%</p>
+        <p>Unhealthy score: {{ cageHealthInfo.unHealthy }}%</p>
         <div class="divider"></div>
-        <p>Unavailable monitor score: 0%</p>
+        <p>Unavailable monitor score: {{ cageHealthInfo.unAvailableMonitors }}%</p>
       </div>
       <button class="refresh">
         <FIcon :width="20" :height="20" :icon-path="iconRefresh" />
