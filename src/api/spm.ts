@@ -28,11 +28,6 @@ export const cageListResponseSchema = apiSuccessResponseSchema.extend({
   data: z.array(cageInfoResponseSchema.shape.data),
 })
 
-export type AddNewCageRequest = {
-  cage_id: string
-  livestock_no: number
-  assigned_monitor: string
-}
 
 export type CageInfo = z.infer<typeof cageInfoResponseSchema.shape.data>
 export type GetCageListResponse = z.infer<typeof cageListResponseSchema>
@@ -63,5 +58,28 @@ export const addCageResponseSchema = apiSuccessResponseSchema.extend({
   }),
 })
 
+export type AddNewCageRequest = {
+  cage_id: string
+  livestock_no: number
+  assigned_monitor: string
+}
+
 export type AddCageInfoResponse = z.infer<typeof addCageResponseSchema>
 export const addCageRequest = (createCageRequest: AddNewCageRequest) => apiRequest.post<AddCageInfoResponse>('/spm/cages', createCageRequest)
+
+export const downloadAllCageInfoInCsvFormatRequest = () => apiRequest.get<Blob>('/spm/export/csv', { responseType: 'blob', })
+export const downloadAllCageInfoInPdfFormatRequest = () => apiRequest.get<Blob>('/spm/export/pdf', { responseType: 'blob', })
+
+export enum FileType {
+  CSV = 'csv',
+  PDF = 'pdf',
+}
+
+export type ExportCageReportInCsvFormatRequest = {
+  cage_id: string,
+  start_date: string,
+  end_date: string,
+  file_type: FileType,
+}
+
+export const exportCageInfoInParticularDateRangeRequest = (payload: ExportCageReportInCsvFormatRequest) => apiRequest.post<Blob>('/spm/report', payload, { responseType: 'blob' })

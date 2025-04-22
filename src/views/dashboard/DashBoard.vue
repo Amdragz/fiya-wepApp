@@ -1,6 +1,28 @@
 <script setup lang="ts">
 import AppMenu from '@/components/shared/AppMenu.vue'
 import FPage from '@/components/system/layout/FPage.vue'
+// import { useSpmStore } from '@/stores/spm'
+// import { onMounted, ref } from 'vue'
+
+// onMounted(() => {
+//   fetchUsersCageInfo()
+// })
+
+// const { getUsersCageInfo } = useSpmStore()
+// const isLoading = ref<boolean>(false)
+
+// const fetchUsersCageInfo = async () => {
+//   try {
+//     isLoading.value = true
+//     console.log('its fetching')
+//     await getUsersCageInfo()
+//   } catch (error) {
+//     console.log(error)
+//     isLoading.value = false
+//   } finally {
+//     isLoading.value = false
+//   }
+// }
 </script>
 
 <template>

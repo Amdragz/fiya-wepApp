@@ -1,10 +1,4 @@
 <script lang="ts">
-// interface NewCageFormData {
-//   cage_id: string
-//   livestock_no: string
-//   assigned_monitor: string
-// }
-
 const FormSchema = z.object({
   cage_id: z.string().min(1, { message: 'Cage id is required' }),
   livestock_no: z.number().min(1, { message: 'You must have atleast one livestock' }),
