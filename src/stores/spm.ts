@@ -4,11 +4,15 @@ import {
   downloadAllCageInfoInPdfFormatRequest,
   exportCageInfoInParticularDateRangeRequest,
   FileType,
+  getCageHealthSettingsRequest,
   getUsersCageInfoRequest,
+  updateHealthSettingsRequest,
   type AddCageInfoResponse,
   type AddNewCageRequest,
   type ExportCageReportInCsvFormatRequest,
   type GetCageListResponse,
+  type HealthSettings,
+  type UpdateHealthSettingsRequest,
 } from '@/api/spm'
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
@@ -16,6 +20,7 @@ import { computed, ref } from 'vue'
 export const useSpmStore = defineStore('spm', () => {
   const newCage = ref<AddCageInfoResponse['data'] | null>(null)
   const cageInfoList = ref<GetCageListResponse['data']>([])
+  const healthSettings = ref<HealthSettings['data'] | null>(null)
 
   const cageHealthInfo = computed(() => {
     const lastCage = cageInfoList.value[cageInfoList.value.length - 1]
@@ -94,15 +99,40 @@ export const useSpmStore = defineStore('spm', () => {
     window.URL.revokeObjectURL(url)
   }
 
+  async function getCageHealthSettings() {
+    if (cageInfoList.value.length === 0) {
+      console.log("cage list info is empty and does not exist")
+      return
+    }
+    const cage_id = cageInfoList.value[0].cage_id
+    const response = await getCageHealthSettingsRequest(cage_id)
+    healthSettings.value = response.data.data
+    return response.data
+  }
+
+  async function updateHealthSettings(payload: UpdateHealthSettingsRequest) {
+    if (cageInfoList.value.length === 0) {
+      console.log("cage list info is empty and does not exist")
+      return
+    }
+    const cage_id = cageInfoList.value[0].cage_id
+    const response = await updateHealthSettingsRequest(payload, cage_id)
+    healthSettings.value = response.data.data
+    return response.data
+  }
+
 
   return {
     newCage,
     cageInfoList,
     cageHealthInfo,
+    healthSettings,
     addNewCage,
     getUsersCageInfo,
     downloadCageInfoInCsvFormat,
     downloadCageInfoInPdfFormat,
     exportCageReportInParticularDateRange,
+    getCageHealthSettings,
+    updateHealthSettings,
   }
 })

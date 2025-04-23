@@ -83,3 +83,23 @@ export type ExportCageReportInCsvFormatRequest = {
 }
 
 export const exportCageInfoInParticularDateRangeRequest = (payload: ExportCageReportInCsvFormatRequest) => apiRequest.post<Blob>('/spm/report', payload, { responseType: 'blob' })
+
+
+export const updateHealthSettingsSuccessResponseSchema = apiSuccessResponseSchema.extend({
+  data: z.object({
+    temperature: z.number(),
+    pressure: z.number(),
+    humidity: z.number()
+  })
+})
+
+
+export type HealthSettings = z.infer<typeof updateHealthSettingsSuccessResponseSchema>
+export type UpdateHealthSettingsRequest = {
+  temperature: number,
+  pressure: number,
+  humidity: number
+}
+
+export const getCageHealthSettingsRequest = (cage_id: string) => apiRequest.get<HealthSettings>(`/spm/${cage_id}/health-settings`)
+export const updateHealthSettingsRequest = (payload: UpdateHealthSettingsRequest, cage_id: string) => apiRequest.post<HealthSettings>(`/spm/${cage_id}/health-settings`, payload)

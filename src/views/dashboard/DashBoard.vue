@@ -1,28 +1,27 @@
 <script setup lang="ts">
 import AppMenu from '@/components/shared/AppMenu.vue'
 import FPage from '@/components/system/layout/FPage.vue'
-// import { useSpmStore } from '@/stores/spm'
-// import { onMounted, ref } from 'vue'
+import { useSpmStore } from '@/stores/spm'
+import { onMounted, ref } from 'vue'
 
-// onMounted(() => {
-//   fetchUsersCageInfo()
-// })
+onMounted(() => {
+  fetchUsersCageInfo()
+})
 
-// const { getUsersCageInfo } = useSpmStore()
-// const isLoading = ref<boolean>(false)
+const { getUsersCageInfo, getCageHealthSettings } = useSpmStore()
+const isLoading = ref<boolean>(false)
 
-// const fetchUsersCageInfo = async () => {
-//   try {
-//     isLoading.value = true
-//     console.log('its fetching')
-//     await getUsersCageInfo()
-//   } catch (error) {
-//     console.log(error)
-//     isLoading.value = false
-//   } finally {
-//     isLoading.value = false
-//   }
-// }
+const fetchUsersCageInfo = async () => {
+  try {
+    isLoading.value = true
+    await getUsersCageInfo()
+    await getCageHealthSettings()
+  } catch (error) {
+    console.log(error)
+  } finally {
+    isLoading.value = false
+  }
+}
 </script>
 
 <template>
@@ -30,7 +29,10 @@ import FPage from '@/components/system/layout/FPage.vue'
     <template #nav-content>
       <AppMenu />
     </template>
-    <RouterView v-slot="{ Component }">
+    <div v-if="isLoading">
+      Loading...
+    </div>
+    <RouterView v-else v-slot="{ Component }">
       <Transition name="fade">
         <component :is="Component" />
       </Transition>

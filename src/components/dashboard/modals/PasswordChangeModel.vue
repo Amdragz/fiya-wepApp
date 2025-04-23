@@ -90,7 +90,6 @@ const changeUserPassword = async () => {
     console.log("successful password change")
   } catch (error) {
     console.log(error)
-    isLoading.value = false
   } finally {
     isLoading.value = false
   }

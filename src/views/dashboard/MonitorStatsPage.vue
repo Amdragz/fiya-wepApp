@@ -19,7 +19,7 @@ type TableFields = {
   coccidiosis: number
   newcastle: number
   salmonella: number
-  health_score: number,
+  health_score: number
   timestamp: string
   created_at: string
   updated_at: string
@@ -29,7 +29,7 @@ type TableFields = {
 <script setup lang="ts">
 import { iconRefresh } from '@/assets/images/icons'
 import FIcon from '@/components/system/common/FIcon.vue'
-import { computed, onMounted, ref } from 'vue'
+import { computed } from 'vue'
 import thermometerIcon from '@/assets/images/illustrations/thermometer.svg'
 import humidityIcon from '@/assets/images/illustrations/humidity.svg'
 import pressureIcon from '@/assets/images/illustrations/low-blood-pressure.svg'
@@ -44,26 +44,8 @@ import { storeToRefs } from 'pinia'
 import { formatToHMS } from '@/utils/helper'
 
 const spmStore = useSpmStore()
-const isLoading = ref<boolean>(false)
 const { cageInfoList } = storeToRefs(spmStore)
-const { cageHealthInfo } = spmStore
-
-onMounted(() => {
-  fetchUsersCageInfo()
-})
-
-const fetchUsersCageInfo = async () => {
-  try {
-    isLoading.value = true
-    console.log('its fetching')
-    await spmStore.getUsersCageInfo()
-  } catch (error) {
-    console.log(error)
-    isLoading.value = false
-  } finally {
-    isLoading.value = false
-  }
-}
+const { cageHealthInfo, healthSettings } = spmStore
 
 function flattenObjectRecognition(obj: CageInfo): TableFields {
   return {
@@ -90,22 +72,22 @@ const tableFields = computed(() =>
   cageInfoList.value.map((cageInfo) => flattenObjectRecognition(cageInfo)),
 )
 
-const monitoredStatus = ref<MonitoredStatus[]>([
+const monitoredStatus = computed<MonitoredStatus[]>(() => [
   {
     status: 'Temperature',
-    normalValue: '400',
+    normalValue: Math.round(healthSettings?.temperature ?? 36).toString(),
     abnormalValue: '15',
     imageSrc: thermometerIcon,
   },
   {
     status: 'Humidity',
-    normalValue: '400',
+    normalValue: Math.round(healthSettings?.humidity ?? 60).toString(),
     abnormalValue: '15',
     imageSrc: humidityIcon,
   },
   {
     status: 'Pressure',
-    normalValue: '400',
+    normalValue: Math.round(healthSettings?.temperature ?? 176).toString(),
     abnormalValue: '15',
     imageSrc: pressureIcon,
   },
@@ -141,22 +123,22 @@ const fieldHeader = [
   'Coccidiosis',
   'Newcastle',
   'Salmonella',
-  'Health score'
+  'Health score',
 ]
 
 const headerKeyMap: Record<string, string> = {
   'Cage ID': 'cage_id',
-  'Timestamp': 'timestamp',
+  Timestamp: 'timestamp',
   'Livestock no': 'livestock_no',
-  'Temperature': 'temperature',
-  'Humidity': 'humidity',
-  'Pressure': 'pressure',
-  'Ammonia': 'ammonia',
-  'CO2': 'co2',
-  'Coccidiosis': 'coccidiosis',
-  'Newcastle': 'newcastle',
-  'Salmonella': 'salmonella',
-  'Health score': 'health_score'
+  Temperature: 'temperature',
+  Humidity: 'humidity',
+  Pressure: 'pressure',
+  Ammonia: 'ammonia',
+  CO2: 'co2',
+  Coccidiosis: 'coccidiosis',
+  Newcastle: 'newcastle',
+  Salmonella: 'salmonella',
+  'Health score': 'health_score',
 }
 </script>
 
@@ -187,11 +169,7 @@ const headerKeyMap: Record<string, string> = {
       </div>
     </div>
 
-    <div v-if="!tableFields.length">
-      <div>whatever</div>
-    </div>
-
-    <div v-else class="status-table">
+    <div class="status-table">
       <FDashBoardTable
         :headers="fieldHeader"
         :header-key-map="headerKeyMap"

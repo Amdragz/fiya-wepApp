@@ -30,7 +30,6 @@ const logoutUser = async () => {
     router.replace({ name: 'AuthLogin' })
   } catch (error) {
     console.log(error)
-    isLoggingOut.value = false
   } finally {
     isLoggingOut.value = false
   }
