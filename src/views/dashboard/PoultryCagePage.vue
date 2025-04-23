@@ -41,7 +41,6 @@ const addNewUserCage = async () => {
     console.log("Success")
   } catch (error) {
     console.log(error)
-    isLoading.value = false
   } finally {
     isLoading.value = false
   }
