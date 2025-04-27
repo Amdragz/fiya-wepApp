@@ -21,6 +21,8 @@ import FDashBoardTable from '@/components/dashboard/FDashBoardTable.vue'
 import { ref } from 'vue'
 import FInput from '@/components/system/form/FInput.vue'
 import FBtn from '@/components/system/form/FBtn.vue'
+import AddNewCageModal from '@/components/dashboard/modals/AddNewCageModal.vue'
+import FMobileTable from '@/components/dashboard/FMobileTable.vue'
 
 const tableFields: TableFields[] = [
   {
@@ -76,11 +78,21 @@ const newAdminInviteFormData = ref<NewAdminInviteFormData>({
   emailAddress: '',
   assignedRole: '',
 })
+
+const mobileFieldMapping = ['adminName', 'Status', 'emailAddress', 'roles']
+
+const openAddNewCageModel = ref(false)
+
+const toggleAddNewCageModal = () => {
+  openAddNewCageModel.value = true
+}
 </script>
 
 <template>
   <div class="admin-page">
     <div class="admin-page-body">
+      <FBtn class="add-admin-button" @click="toggleAddNewCageModal"> Add admin </FBtn>
+      <AddNewCageModal v-model:open-add-cage="openAddNewCageModel" />
       <div class="admin-user-table">
         <FDashBoardTable
           :headers="fieldHeader"
@@ -96,6 +108,7 @@ const newAdminInviteFormData = ref<NewAdminInviteFormData>({
             </span>
           </template>
         </FDashBoardTable>
+        <FMobileTable :table-fields="tableFields" :field-mapping="mobileFieldMapping" :display-export-button="false"/>
       </div>
 
       <div class="form-container">
@@ -132,6 +145,8 @@ const newAdminInviteFormData = ref<NewAdminInviteFormData>({
 </template>
 
 <style lang="scss" scoped>
+@use '@/assets/scss/abstracts/mixins';
+
 .admin-page {
   width: 100%;
   max-width: 1408px;
@@ -144,6 +159,14 @@ const newAdminInviteFormData = ref<NewAdminInviteFormData>({
     max-width: 1408px;
     display: flex;
     gap: 1.25rem;
+    position: relative;
+
+    .add-admin-button {
+      display: none;
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
 
     .form-container {
       width: 100%;
@@ -210,6 +233,28 @@ const newAdminInviteFormData = ref<NewAdminInviteFormData>({
             }
           }
         }
+      }
+    }
+  }
+
+  @include mixins.media-breakpoint('max-width', md) {
+    .admin-page-body {
+      .admin-user-table {
+        .f-table {
+          display: none;
+        }
+      }
+    }
+  }
+
+  @include mixins.media-breakpoint('max-width', xl) {
+    .admin-page-body {
+      .add-admin-button {
+        display: block;
+      }
+
+      .form-container {
+        display: none;
       }
     }
   }

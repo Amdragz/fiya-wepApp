@@ -33,3 +33,13 @@ export function getFriendlyDateLabel(date: Date | string) {
 
   return format(parsed, 'EEEE')
 }
+
+export const copyText = async (text: string) => {
+  try {
+    await navigator.clipboard.writeText(text)
+    return true
+  } catch (error) {
+    console.error('Failed to copy:', error)
+    return false
+  }
+}

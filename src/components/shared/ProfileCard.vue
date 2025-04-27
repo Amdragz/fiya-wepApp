@@ -69,7 +69,7 @@ const logoutUser = async () => {
   padding: 0 2rem;
   position: absolute;
   top: 100%;
-  right: 100%;
+  right: 0;
 
   .profile-card-container {
     width: 100%;

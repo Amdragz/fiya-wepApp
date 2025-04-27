@@ -31,6 +31,8 @@ const props = withDefaults(defineProps<FPageHeaderProps>(), {
 </template>
 
 <style lang="scss" scoped>
+@use '@/assets/scss/abstracts/mixins';
+
 .f-page-header {
   display: flex;
   align-items: center;
@@ -50,6 +52,10 @@ const props = withDefaults(defineProps<FPageHeaderProps>(), {
       .nav-content {
         width: 100%;
       }
+    }
+
+    @include mixins.media-breakpoint('max-width', sm) {
+      margin-right: auto;
     }
 }
 </style>

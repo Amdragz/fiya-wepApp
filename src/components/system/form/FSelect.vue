@@ -107,7 +107,7 @@ const optionList = computed<JSelctOptionObject[]>(() => {
       outline: none;
       border: 1px solid #d0d5dd;
       border-radius: .5rem;
-      padding: 1rem;
+      padding: 0 1rem;
       background-color: var(--color-white);
       color: var(--color-grey-500);
       line-height: inherit;

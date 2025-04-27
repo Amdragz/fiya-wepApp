@@ -18,12 +18,16 @@ import { storeToRefs } from 'pinia'
 import { formatToHMSdate } from '@/utils/helper'
 import { z } from 'zod'
 import { useZodForm } from '@/composables/useZodForm'
+import AddNewCageModal from '@/components/dashboard/modals/AddNewCageModal.vue'
+import FMobileTable from '@/components/dashboard/FMobileTable.vue'
+import AddCageSuccessModal from '@/components/dashboard/modals/AddCageSuccessModal.vue'
 
 const spmStore = useSpmStore()
 const { addNewCage } = spmStore
 const { cageInfoList } = storeToRefs(spmStore)
 
-const { formData, errors, validateForm, debouncedHandleChange } = useZodForm<typeof FormSchema.shape>(FormSchema)
+const { formData, errors, validateForm, debouncedHandleChange } =
+  useZodForm<typeof FormSchema.shape>(FormSchema)
 const isLoading = ref(false)
 
 const addNewUserCage = async () => {
@@ -38,7 +42,9 @@ const addNewUserCage = async () => {
       livestock_no: formData.value.livestock_no,
       assigned_monitor: formData.value.assigned_monitor,
     })
-    console.log("Success")
+
+    showSuccessModal.value = true
+    console.log('Success')
   } catch (error) {
     console.log(error)
   } finally {
@@ -79,10 +85,20 @@ const tableFields = computed(() => {
 
   return tableFields
 })
+
+const mobileFieldMapping = ['cageId', 'assignedMonitor', 'lastUpdated', '']
+
+const openAddNewCageModel = ref(false)
+const showSuccessModal = ref(false)
+
+const toggleAddNewCageModal = () => {
+  openAddNewCageModel.value = true
+}
 </script>
 
 <template>
   <div class="poultry-cage-page">
+    <AddCageSuccessModal v-model:model-value="showSuccessModal" />
     <div class="status-bar">
       <div class="status">
         <p>Health score: 40%</p>
@@ -98,6 +114,8 @@ const tableFields = computed(() => {
     </div>
 
     <div class="cage-page-body">
+      <FBtn class="add-cage-button" @click="toggleAddNewCageModal"> Add cage </FBtn>
+      <AddNewCageModal v-model:open-add-cage="openAddNewCageModel" />
       <div class="cage-table">
         <FDashBoardTable
           :headers="fieldHeader"
@@ -114,6 +132,7 @@ const tableFields = computed(() => {
             </span>
           </template>
         </FDashBoardTable>
+        <FMobileTable :table-fields="tableFields" :field-mapping="mobileFieldMapping" display-export-button/>
       </div>
 
       <div class="form-container">
@@ -158,6 +177,8 @@ const tableFields = computed(() => {
 </template>
 
 <style lang="scss" scoped>
+@use '@/assets/scss/abstracts/mixins';
+
 .poultry-cage-page {
   width: 100%;
   max-width: 1408px;
@@ -226,6 +247,14 @@ const tableFields = computed(() => {
     max-width: 1408px;
     display: flex;
     gap: 1.25rem;
+    position: relative;
+
+    .add-cage-button {
+      display: none;
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
 
     .form-container {
       width: 100%;
@@ -292,6 +321,53 @@ const tableFields = computed(() => {
             }
           }
         }
+      }
+    }
+  }
+
+  @include mixins.media-breakpoint('max-width', md) {
+    .status-bar {
+      position: relative;
+      .status {
+        width: 100%;
+        flex-direction: column;
+
+        .divider {
+          height: 1px;
+          border: 0.5px solid var(--color-text-secondary);
+          width: 100%;
+        }
+      }
+
+      .refresh {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+
+        p {
+          display: none;
+        }
+      }
+    }
+
+    .cage-page-body {
+      .cage-table {
+        padding-top: 2.5rem;
+        .f-table {
+          display: none;
+        }
+      }
+    }
+  }
+
+  @include mixins.media-breakpoint('max-width', xl) {
+    .cage-page-body {
+      .add-cage-button {
+        display: block;
+      }
+
+      .form-container {
+        display: none;
       }
     }
   }
