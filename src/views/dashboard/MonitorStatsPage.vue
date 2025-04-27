@@ -42,6 +42,7 @@ import { useSpmStore } from '@/stores/spm'
 import type { CageInfo } from '@/api/spm'
 import { storeToRefs } from 'pinia'
 import { formatToHMS } from '@/utils/helper'
+import FMobileTable from '@/components/dashboard/FMobileTable.vue'
 
 const spmStore = useSpmStore()
 const { cageInfoList } = storeToRefs(spmStore)
@@ -140,6 +141,8 @@ const headerKeyMap: Record<string, string> = {
   Salmonella: 'salmonella',
   'Health score': 'health_score',
 }
+
+const mobileFieldMapping = ['cage_id', 'timestamp', 'health_score', '']
 </script>
 
 <template>
@@ -186,11 +189,19 @@ const headerKeyMap: Record<string, string> = {
           </span>
         </template>
       </FDashBoardTable>
+
+      <FMobileTable
+        :table-fields="tableFields"
+        :field-mapping="mobileFieldMapping"
+        display-export-button
+      />
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
+@use '@/assets/scss/abstracts/mixins';
+
 .monitor-stats-page {
   width: 100%;
   max-width: 1408px;
@@ -277,6 +288,48 @@ const headerKeyMap: Record<string, string> = {
     margin-top: 0.5rem;
     background-color: var(--color-white);
     padding: 1.25rem;
+
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    &::--webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  @include mixins.media-breakpoint('max-width', md) {
+    .status-bar {
+      position: relative;
+      .status {
+        width: 100%;
+        flex-direction: column;
+
+        .divider {
+          height: 1px;
+          border: 0.5px solid var(--color-text-secondary);
+          width: 100%;
+        }
+      }
+
+      .refresh {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+
+        p {
+          display: none;
+        }
+      }
+    }
+
+    .status-table {
+      padding-top: 2.5rem;
+      .f-table {
+        display: none;
+      }
+    }
   }
 }
 </style>

@@ -23,14 +23,41 @@ import { useUserStore } from '@/stores/user'
 import { getNameInitials } from '@/utils/helper'
 import ProfileCard from './ProfileCard.vue'
 import { ref } from 'vue'
+import NavMenuDropDown from './NavMenuDropDown.vue'
+import { onClickOutside } from '@vueuse/core'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const { user } = useUserStore()
 const nameInitial = getNameInitials(user?.name ?? '')
 const showProfileCard = ref(false)
+const showNavMenuDropDown = ref(false)
+const isDisplaying = ref(false)
 
-const toggleprofileCard = () => {
+const toggleProfileCard = () => {
   showProfileCard.value = !showProfileCard.value
 }
+
+const toggleMobileMenuNav = () => {
+  isDisplaying.value = !isDisplaying.value
+  showNavMenuDropDown.value = !showNavMenuDropDown.value
+}
+
+router.afterEach(() => {
+  isDisplaying.value = false
+  showNavMenuDropDown.value = false
+})
+
+const profileCardRef = ref(undefined)
+const navMenuDropDownRef = ref(undefined)
+
+onClickOutside(profileCardRef, () => {
+  showProfileCard.value = false
+})
+
+onClickOutside(navMenuDropDownRef, () => {
+  showNavMenuDropDown.value = false
+})
 </script>
 
 <template>
@@ -74,10 +101,53 @@ const toggleprofileCard = () => {
     </div>
     <div class="profile">
       <FIcon :width="20" :height="20" :icon-path="iconNotification" />
-      <div @click="toggleprofileCard" class="avatar">{{ nameInitial }}</div>
-      <p @click="toggleprofileCard" class="name">{{ user?.name }}</p>
+      <div @click="toggleProfileCard" class="avatar">{{ nameInitial }}</div>
+      <p @click="toggleProfileCard" class="name">{{ user?.name }}</p>
 
-      <ProfileCard v-bind:model-value="showProfileCard"/>
+      <div class="nav-icon">
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 33 32"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          v-if="isDisplaying"
+          @click="toggleMobileMenuNav"
+        >
+          <rect x="0.228516" width="32" height="32" rx="4" fill="#F6F8FC" />
+          <path
+            d="M22 10L10 22 M10 10L22 22"
+            stroke="#212121"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          v-else
+          @click="toggleMobileMenuNav"
+        >
+          <path
+            d="M3 6H21M3 12H21M3 18H21"
+            stroke="#212121"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </div>
+
+      <div :ref="navMenuDropDownRef">
+        <NavMenuDropDown v-bind:model-value="showNavMenuDropDown" />
+      </div>
+      <div :ref="profileCardRef">
+        <ProfileCard v-bind:model-value="showProfileCard" />
+      </div>
     </div>
   </FMenu>
 </template>
@@ -166,6 +236,10 @@ const toggleprofileCard = () => {
       white-space: nowrap;
       cursor: pointer;
     }
+
+    .nav-icon {
+      display: none;
+    }
   }
 
   @include mixins.media-breakpoint('max-width', lg) {
@@ -175,6 +249,11 @@ const toggleprofileCard = () => {
 
     .profile {
       margin-left: auto;
+
+      .nav-icon {
+        display: block;
+        margin-left: 1rem;
+      }
     }
   }
 }

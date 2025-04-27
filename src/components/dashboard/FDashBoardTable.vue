@@ -254,5 +254,12 @@ const userDownloadCageInfoInCsv = async () => {
       margin: 0 auto;
     }
   }
+
+  @include mixins.media-breakpoint('max-width', lg) {
+    .header {
+      flex-direction: column-reverse;
+      gap: 2rem;
+    }
+  }
 }
 </style>
