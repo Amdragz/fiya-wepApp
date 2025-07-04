@@ -1,16 +1,15 @@
 <script lang="ts">
 interface FPageHeaderProps {
-  logoSrc?: string,
+  logoSrc?: string
 }
-
 </script>
 
 <script setup lang="ts">
-import FContainer from './FContainer.vue';
-import fiyaLogo from '@/assets/images/logos/fiya-logo.svg';
+import FContainer from './FContainer.vue'
+import fiyaLogo from '@/assets/images/logos/fiya-logo.svg'
 
 const props = withDefaults(defineProps<FPageHeaderProps>(), {
-  logoSrc: fiyaLogo
+  logoSrc: fiyaLogo,
 })
 </script>
 
@@ -39,23 +38,25 @@ const props = withDefaults(defineProps<FPageHeaderProps>(), {
   justify-content: space-between;
   width: 100%;
   max-width: 1440px;
+  margin: 0 auto;
   height: 4rem;
 
-    .f-container {
-      display: flex;
-      align-items: center;
+  .f-container {
+    width: 100%;
+    display: flex;
+    align-items: center;
 
-      .nav-logo-container {
-        margin-right: 5.5rem;
-      }
-
-      .nav-content {
-        width: 100%;
-      }
+    .nav-logo-container {
+      margin-right: 5.5rem;
     }
 
-    @include mixins.media-breakpoint('max-width', sm) {
-      margin-right: auto;
+    .nav-content {
+      width: 100%;
     }
+  }
+
+  @include mixins.media-breakpoint('max-width', sm) {
+    margin-right: auto;
+  }
 }
 </style>

@@ -18,7 +18,6 @@ const showPageLoader = computed(() => authenticating)
 
 <style scoped>
 .fiya-main-loader {
-  
   display: flex;
   align-items: center;
   justify-content: center;
