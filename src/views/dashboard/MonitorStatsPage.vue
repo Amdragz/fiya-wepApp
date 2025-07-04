@@ -163,23 +163,14 @@ const mobileFieldMapping = ['cage_id', 'timestamp', 'health_score', '']
 
     <div class="status-cards">
       <div v-for="(status, index) in monitoredStatus" :key="index">
-        <FStatusCard
-          :title="status.status"
-          :normal-status="status.normalValue"
-          :abnormal-status="status.abnormalValue"
-          :image-src="status.imageSrc"
-        />
+        <FStatusCard :title="status.status" :normal-status="status.normalValue" :abnormal-status="status.abnormalValue"
+          :image-src="status.imageSrc" />
       </div>
     </div>
 
     <div class="status-table">
-      <FDashBoardTable
-        :headers="fieldHeader"
-        :header-key-map="headerKeyMap"
-        :page-size="10"
-        :table-fields="tableFields"
-        show-time-filter
-      >
+      <FDashBoardTable :headers="fieldHeader" :header-key-map="headerKeyMap" :page-size="10" :table-fields="tableFields"
+        show-time-filter>
         <template #field="{ field, colIndex }">
           <span v-if="colIndex === 0">
             {{ field.slice(0, 6) }}
@@ -190,11 +181,7 @@ const mobileFieldMapping = ['cage_id', 'timestamp', 'health_score', '']
         </template>
       </FDashBoardTable>
 
-      <FMobileTable
-        :table-fields="tableFields"
-        :field-mapping="mobileFieldMapping"
-        display-export-button
-      />
+      <FMobileTable :table-fields="tableFields" :field-mapping="mobileFieldMapping" display-export-button />
     </div>
   </div>
 </template>
@@ -302,6 +289,7 @@ const mobileFieldMapping = ['cage_id', 'timestamp', 'health_score', '']
   @include mixins.media-breakpoint('max-width', md) {
     .status-bar {
       position: relative;
+
       .status {
         width: 100%;
         flex-direction: column;
@@ -326,6 +314,7 @@ const mobileFieldMapping = ['cage_id', 'timestamp', 'health_score', '']
 
     .status-table {
       padding-top: 2.5rem;
+
       .f-table {
         display: none;
       }

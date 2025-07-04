@@ -67,7 +67,7 @@ const fetchUsersCageInfo = async () => {
       justify-content: center;
       width: 100%;
       height: 100svh;
-      background-color: #FFFFFF;
+      background-color: #ffffff;
     }
   }
 }
