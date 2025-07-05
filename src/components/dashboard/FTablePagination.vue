@@ -8,6 +8,7 @@ interface JPaginationProps {
 <script lang="ts" setup>
 import { useSpmStore } from '@/stores/spm'
 import FIcon from '../system/common/FIcon.vue'
+import FSpinner from '../system/common/FSpinner.vue'
 import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
 const spmStore = useSpmStore()
@@ -17,10 +18,12 @@ const { fetchedPages, currentPage } = storeToRefs(spmStore)
 const props = defineProps<JPaginationProps>()
 const emit = defineEmits(['page-changed'])
 const isLoading = ref(false)
+const loadingPage = ref<number | null>(null)
 
 const changePage = async (page: number) => {
   if (page >= 1 && page <= props.totalPages) {
     const pagesToFetch = []
+    loadingPage.value = page
 
     for (let i = 1; i <= page; i++) {
       if (!fetchedPages.value.includes(i)) {
@@ -30,6 +33,7 @@ const changePage = async (page: number) => {
 
     if (pagesToFetch.length === 0) {
       currentPage.value = page
+      loadingPage.value = null
       emit('page-changed', page)
       return
     }
@@ -48,7 +52,10 @@ const changePage = async (page: number) => {
       currentPage.value = page
     } catch (error) {
       console.log(error)
+      loadingPage.value = null
+      isLoading.value = false
     } finally {
+      loadingPage.value = null
       isLoading.value = false
     }
 
@@ -66,8 +73,11 @@ const changePage = async (page: number) => {
     </button>
 
     <button v-for="page in totalPages" :key="page" @click="changePage(page)"
-      :class="['page-button', { active: currentActivePage === page }]">
-      {{ page }}
+      :class="['page-button', { active: currentPage === page }]">
+      <FSpinner v-if="loadingPage === page" color="green" :size="16" />
+      <span v-else>
+        {{ page }}
+      </span>
     </button>
 
     <button @click="changePage(currentActivePage + 1)" :disabled="currentActivePage === totalPages" class="page-button">

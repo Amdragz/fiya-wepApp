@@ -17,16 +17,14 @@ import FBtn from '../system/form/FBtn.vue'
 import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 import { getFriendlyDateLabel } from '@/utils/helper'
-import { storeToRefs } from 'pinia'
 import { useSpmStore } from '@/stores/spm'
 
 const props = defineProps<FTableProps>()
+const currentPage = ref(1)
 
 const newSearchFilter = ref<string | null>()
 const newTimeSelectFilter = ref<Date>()
-const spmStore = useSpmStore()
-const { downloadCageInfoInCsvFormat } = spmStore
-const { currentPage } = storeToRefs(spmStore)
+const { downloadCageInfoInCsvFormat } = useSpmStore()
 
 const filteredFields = computed(() => {
   console.log('The beginning afte the end')
@@ -66,7 +64,6 @@ const totalPages = computed(() => Math.ceil(totalItems.value / pageSize))
 const pageSize = props.pageSize
 
 const paginatedFields = computed(() => {
-  console.log(filteredFields)
   const start = (currentPage.value - 1) * pageSize
   const end = start + pageSize
   return filteredFields.value.slice(start, end)

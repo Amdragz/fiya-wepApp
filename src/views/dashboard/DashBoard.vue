@@ -40,7 +40,7 @@ const fetchUsersCageInfo = async () => {
       </div>
     </div>
     <RouterView v-else v-slot="{ Component }">
-      <Transition name="fade">
+      <Transition name="fade" mode="out-in">
         <component :is="Component" />
       </Transition>
     </RouterView>
@@ -60,6 +60,7 @@ const fetchUsersCageInfo = async () => {
 
 .main-page {
   background-color: var(--color-brand-neutral-200);
+  height: 100svh;
 
   .fiya-main-loader-container {
     padding: 1rem;

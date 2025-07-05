@@ -15,24 +15,25 @@ import { ref } from 'vue'
 import { z } from 'zod'
 
 const { updateHealthSettings } = useSpmStore()
-const { formData, errors, debouncedHandleChange, validateForm } = useZodForm<typeof formSchema.shape>(formSchema)
+const { formData, errors, debouncedHandleChange, validateForm } =
+  useZodForm<typeof formSchema.shape>(formSchema)
 
 const isLoading = ref(false)
 const updateUserCageHealthSettings = async () => {
   try {
-    console.log("it started but nothing happened")
+    console.log('it started but nothing happened')
     isLoading.value = true
 
-    const isValid = validateForm();
+    const isValid = validateForm()
     if (!isValid) {
-      console.log("So it was not validated")
+      console.log('So it was not validated')
       return
     }
 
     await updateHealthSettings({
       temperature: formData.value.temperature,
       pressure: formData.value.pressure,
-      humidity: formData.value.humidity
+      humidity: formData.value.humidity,
     })
   } catch (error) {
     console.log(error)
@@ -47,36 +48,15 @@ const updateUserCageHealthSettings = async () => {
     <div class="settings-page-container">
       <h2 class="header">Health settings</h2>
       <form @submit.prevent="updateUserCageHealthSettings" class="settings-form">
-        <FInput
-          v-model:model-value="formData.temperature"
-          type="number"
-          step="any"
-          label="Normal Temperature"
-          placeholder="Enter data"
-          @input="debouncedHandleChange($event, 'temperature')"
-          :has-error="!!errors.temperature"
-          :error-message="errors.temperature"
-        />
-        <FInput
-          v-model:model-value="formData.pressure"
-          type="number"
-          step="any"
-          label="Normal Pressure"
-          placeholder="Enter data"
-          @input="debouncedHandleChange($event, 'pressure')"
-          :has-error="!!errors.pressure"
-          :error-message="errors.pressure"
-        />
-        <FInput
-          v-model:model-value="formData.humidity"
-          type="number"
-          step="any"
-          label="Normal Humidity"
-          placeholder="Enter data"
-          @input="debouncedHandleChange($event, 'humidity')"
-          :has-error="!!errors.humidity"
-          :error-message="errors.humidity"
-        />
+        <FInput v-model:model-value="formData.temperature" type="number" step="any" label="Normal Temperature"
+          placeholder="Enter data" @input="debouncedHandleChange($event, 'temperature')"
+          :has-error="!!errors.temperature" :error-message="errors.temperature" />
+        <FInput v-model:model-value="formData.pressure" type="number" step="any" label="Normal Pressure"
+          placeholder="Enter data" @input="debouncedHandleChange($event, 'pressure')" :has-error="!!errors.pressure"
+          :error-message="errors.pressure" />
+        <FInput v-model:model-value="formData.humidity" type="number" step="any" label="Normal Humidity"
+          placeholder="Enter data" @input="debouncedHandleChange($event, 'humidity')" :has-error="!!errors.humidity"
+          :error-message="errors.humidity" />
         <FBtn :loading="isLoading" type="submit" size="lg">Save settings</FBtn>
       </form>
     </div>
@@ -88,12 +68,14 @@ const updateUserCageHealthSettings = async () => {
 
 .settings-page {
   width: 100%;
+  height: 100%;
   padding: 1rem;
   background-color: var(--color-brand-neutral-200);
 
   .settings-page-container {
     border-radius: 0.5rem;
     padding-bottom: 3rem;
+    height: 100%;
     background-color: var(--color-white);
 
     .header {
