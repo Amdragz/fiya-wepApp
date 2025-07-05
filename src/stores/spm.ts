@@ -24,7 +24,7 @@ export const useSpmStore = defineStore('spm', () => {
   const cageDataList = ref<GetCageDataResponse['data']['cages']>([])
   const healthSettings = ref<HealthSettings['data'] | null>(null)
   const currentPage = ref<number>(1)
-  const fetchedPages = ref<number[]>([])
+  const fetchedPages = ref<number[]>([1])
 
   const cageHealthInfo = computed(() => {
     const lastCage = cageDataList.value[0]
@@ -52,10 +52,8 @@ export const useSpmStore = defineStore('spm', () => {
   async function getUsersCageData(pagination: CagePagination): Promise<GetCageDataResponse> {
     const response = await getUsersCageDataRequest(pagination)
     const cageData = response.data.data.cages
-    totalCageData.value = response.data.data.total_cage_data
-    currentPage.value = pagination.page
 
-    fetchedPages.value.push(currentPage.value)
+    totalCageData.value = response.data.data.total_cage_data
     cageDataList.value.push(...cageData)
 
     return response.data

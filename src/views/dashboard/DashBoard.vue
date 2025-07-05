@@ -17,8 +17,8 @@ const fetchUsersCageInfo = async () => {
   try {
     isLoading.value = true
     await getUsersCageData({
-      page: 1,
-      per_page: 10,
+      offset: 0,
+      limit: 10,
     })
     await getCageHealthSettings()
   } catch (error) {
