@@ -13,7 +13,7 @@ import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
 const spmStore = useSpmStore()
 const { getUsersCageData } = spmStore
-const { fetchedPages, currentPage } = storeToRefs(spmStore)
+const { currentPage, fetchedPages } = storeToRefs(spmStore)
 
 const props = defineProps<JPaginationProps>()
 const emit = defineEmits(['page-changed'])
@@ -22,16 +22,7 @@ const loadingPage = ref<number | null>(null)
 
 const changePage = async (page: number) => {
   if (page >= 1 && page <= props.totalPages) {
-    const pagesToFetch = []
-    loadingPage.value = page
-
-    for (let i = 1; i <= page; i++) {
-      if (!fetchedPages.value.includes(i)) {
-        pagesToFetch.push(i)
-      }
-    }
-
-    if (pagesToFetch.length === 0) {
+    if (fetchedPages.value.includes(page)) {
       currentPage.value = page
       loadingPage.value = null
       emit('page-changed', page)
@@ -40,20 +31,28 @@ const changePage = async (page: number) => {
 
     try {
       isLoading.value = true
+      loadingPage.value = page
 
-      for (const p of pagesToFetch) {
-        await getUsersCageData({
-          page: p,
-          per_page: 10,
-        })
-        fetchedPages.value.push(p)
+      const fromPage = currentPage.value
+      const offset = Math.min(fromPage, page) * 10
+      const limit = Math.abs(page - fromPage) * 10
+
+      await getUsersCageData({
+        offset,
+        limit: limit || 10,
+      })
+
+      const start = Math.min(fromPage, page)
+      const end = Math.max(fromPage, page)
+      for (let i = start + 1; i <= end; i++) {
+        if (!fetchedPages.value.includes(i)) {
+          fetchedPages.value.push(i)
+        }
       }
 
       currentPage.value = page
     } catch (error) {
       console.log(error)
-      loadingPage.value = null
-      isLoading.value = false
     } finally {
       loadingPage.value = null
       isLoading.value = false

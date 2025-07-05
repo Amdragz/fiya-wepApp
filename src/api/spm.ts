@@ -35,15 +35,15 @@ export type CageInfo = z.infer<typeof cageInfoResponseSchema.shape.data>
 export type GetCageDataResponse = z.infer<typeof cageListResponseSchema>
 
 export type CagePagination = {
-  page: number
-  per_page: number
+  offset: number
+  limit: number
 }
 
 export const getUsersCageDataRequest = (pagination: CagePagination) =>
   apiRequest.get<GetCageDataResponse>('/spm/cages', {
     params: {
-      page: pagination.page,
-      per_page: pagination.per_page,
+      offset: pagination.offset,
+      limit: pagination.limit,
     },
   })
 
