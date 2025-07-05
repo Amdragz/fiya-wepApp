@@ -16,23 +16,20 @@ import FTablePagination from './FTablePagination.vue'
 import FBtn from '../system/form/FBtn.vue'
 import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
-import { getFriendlyDateLabel } from '@/utils/helper'
+// import { getFriendlyDateLabel } from '@/utils/helper'
 import { useSpmStore } from '@/stores/spm'
 
 const props = defineProps<FTableProps>()
 const currentPage = ref(1)
 
 const newSearchFilter = ref<string | null>()
-const newTimeSelectFilter = ref<Date>()
+const newTimeSelectFilter = ref<[Date, Date] | null>()
 const { downloadCageInfoInCsvFormat } = useSpmStore()
 
 const filteredFields = computed(() => {
-  console.log('The beginning afte the end')
-  console.log(props.tableFields)
   let currentFields = props.tableFields
 
   if (newSearchFilter.value) {
-    console.log(newSearchFilter.value)
     currentFields = currentFields.filter((field) => {
       const cageId = field.cage_id ?? ''
 
@@ -44,19 +41,17 @@ const filteredFields = computed(() => {
   }
 
   if (newTimeSelectFilter.value) {
+    const [startDate, endDate] = newTimeSelectFilter.value.map((date) =>
+      new Date(date).toISOString(),
+    )
+
     currentFields = currentFields.filter((item) => {
-      const itemDate = new Date(item.timestamp).toDateString()
-      const selected = newTimeSelectFilter.value?.toDateString()
-      return itemDate === selected
+      const itemDate = new Date(item.timestamp).toISOString()
+      return itemDate >= startDate && itemDate <= endDate
     })
   }
 
   return currentFields
-})
-
-const readableDate = computed(() => {
-  if (!newTimeSelectFilter.value) return ''
-  return getFriendlyDateLabel(newTimeSelectFilter.value)
 })
 
 const totalItems = computed(() => (props.totalCageData === null ? 0 : props.totalCageData))
@@ -94,8 +89,7 @@ const userDownloadCageInfoInCsv = async () => {
       <input type="text" placeholder="Search" v-model="newSearchFilter" />
       <div class="buttons">
         <button v-if="props.showTimeFilter" class="time">
-          <p>{{ readableDate }}</p>
-          <VueDatePicker v-model="newTimeSelectFilter" />
+          <VueDatePicker v-model="newTimeSelectFilter" range />
         </button>
         <FBtn @click="userDownloadCageInfoInCsv" color="secondary">
           <span v-if="isExportingCageInfo"> Downloading...</span>
