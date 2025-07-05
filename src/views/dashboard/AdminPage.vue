@@ -67,10 +67,10 @@ const fieldHeader = ['Admin name', 'Email address', 'Roles', 'Date joined', 'Sta
 const headerKeyMap: Record<string, string> = {
   'Admin name': 'adminName',
   'Email address': 'emailAddress',
-  'Roles': 'roles',
+  Roles: 'roles',
   'Date joined': 'dateJoined',
-  'Status': 'status',
-  'actions': 'actions',
+  Status: 'status',
+  actions: 'actions',
 }
 
 const newAdminInviteFormData = ref<NewAdminInviteFormData>({
@@ -94,12 +94,8 @@ const toggleAddNewCageModal = () => {
       <FBtn class="add-admin-button" @click="toggleAddNewCageModal"> Add admin </FBtn>
       <AddNewCageModal v-model:open-add-cage="openAddNewCageModel" />
       <div class="admin-user-table">
-        <FDashBoardTable
-          :headers="fieldHeader"
-          :header-key-map="headerKeyMap"
-          :page-size="10"
-          :table-fields="tableFields"
-        >
+        <FDashBoardTable :total-cage-data="tableFields.length" :headers="fieldHeader" :header-key-map="headerKeyMap"
+          :page-size="10" :table-fields="tableFields">
           <template #field="field">
             <span v-if="field.colIndex === 5" class="actions">
               <button>
@@ -108,7 +104,7 @@ const toggleAddNewCageModal = () => {
             </span>
           </template>
         </FDashBoardTable>
-        <FMobileTable :table-fields="tableFields" :field-mapping="mobileFieldMapping" :display-export-button="false"/>
+        <FMobileTable :table-fields="tableFields" :field-mapping="mobileFieldMapping" :display-export-button="false" />
       </div>
 
       <div class="form-container">
@@ -119,22 +115,11 @@ const toggleAddNewCageModal = () => {
           </div>
 
           <div class="body">
-            <FInput
-              v-model:model-value="newAdminInviteFormData.fullName"
-              label="Full name"
-              placeholder="Enter name"
-            />
-            <FInput
-              type="email"
-              v-model:model-value="newAdminInviteFormData.emailAddress"
-              label="Email email"
-              placeholder="1"
-            />
-            <FInput
-              v-model:model-value="newAdminInviteFormData.assignedRole"
-              label="Assigned role"
-              placeholder="Select role"
-            />
+            <FInput v-model:model-value="newAdminInviteFormData.fullName" label="Full name" placeholder="Enter name" />
+            <FInput type="email" v-model:model-value="newAdminInviteFormData.emailAddress" label="Email email"
+              placeholder="1" />
+            <FInput v-model:model-value="newAdminInviteFormData.assignedRole" label="Assigned role"
+              placeholder="Select role" />
 
             <FBtn size="lg">Invite admin</FBtn>
           </div>

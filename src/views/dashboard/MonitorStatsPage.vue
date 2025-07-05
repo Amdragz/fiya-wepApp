@@ -45,7 +45,7 @@ import { formatToHMS } from '@/utils/helper'
 import FMobileTable from '@/components/dashboard/FMobileTable.vue'
 
 const spmStore = useSpmStore()
-const { cageInfoList } = storeToRefs(spmStore)
+const { cageDataList, totalCageData } = storeToRefs(spmStore)
 const { cageHealthInfo, healthSettings } = spmStore
 
 function flattenObjectRecognition(obj: CageInfo): TableFields {
@@ -70,7 +70,7 @@ function flattenObjectRecognition(obj: CageInfo): TableFields {
 }
 
 const tableFields = computed(() =>
-  cageInfoList.value.map((cageInfo) => flattenObjectRecognition(cageInfo)),
+  cageDataList.value.map((cageInfo) => flattenObjectRecognition(cageInfo)),
 )
 
 const monitoredStatus = computed<MonitoredStatus[]>(() => [
@@ -169,8 +169,8 @@ const mobileFieldMapping = ['cage_id', 'timestamp', 'health_score', '']
     </div>
 
     <div class="status-table">
-      <FDashBoardTable :headers="fieldHeader" :header-key-map="headerKeyMap" :page-size="10" :table-fields="tableFields"
-        show-time-filter>
+      <FDashBoardTable :headers="fieldHeader" :header-key-map="headerKeyMap" :total-cage-data="totalCageData"
+        :page-size="10" :table-fields="tableFields" show-time-filter>
         <template #field="{ field, colIndex }">
           <span v-if="colIndex === 0">
             {{ field.slice(0, 6) }}

@@ -25,14 +25,25 @@ export const cageInfoResponseSchema = apiSuccessResponseSchema.extend({
 })
 
 export const cageListResponseSchema = apiSuccessResponseSchema.extend({
-  data: z.array(cageInfoResponseSchema.shape.data),
+  data: z.object({
+    total_cage_data: z.number(),
+    cages: z.array(cageInfoResponseSchema.shape.data),
+  }),
 })
 
-
 export type CageInfo = z.infer<typeof cageInfoResponseSchema.shape.data>
-export type GetCageListResponse = z.infer<typeof cageListResponseSchema>
+export type GetCageDataResponse = z.infer<typeof cageListResponseSchema>
 
-export const getUsersCageInfoRequest = () => apiRequest.get<GetCageListResponse>("/spm/cages")
+export type CagePagination = {
+  page: number
+  per_page: number
+}
+
+export const getUsersCageDataRequest = (pagination: CagePagination) =>
+  apiRequest.post<GetCageDataResponse>('/spm/cages', {
+    page: pagination.page,
+    per_page: pagination.per_page,
+  })
 
 export const addCageResponseSchema = apiSuccessResponseSchema.extend({
   data: z.object({
@@ -65,10 +76,13 @@ export type AddNewCageRequest = {
 }
 
 export type AddCageInfoResponse = z.infer<typeof addCageResponseSchema>
-export const addCageRequest = (createCageRequest: AddNewCageRequest) => apiRequest.post<AddCageInfoResponse>('/spm/cages', createCageRequest)
+export const addCageRequest = (createCageRequest: AddNewCageRequest) =>
+  apiRequest.post<AddCageInfoResponse>('/spm/cages', createCageRequest)
 
-export const downloadAllCageInfoInCsvFormatRequest = () => apiRequest.get<Blob>('/spm/export/csv', { responseType: 'blob', })
-export const downloadAllCageInfoInPdfFormatRequest = () => apiRequest.get<Blob>('/spm/export/pdf', { responseType: 'blob', })
+export const downloadAllCageInfoInCsvFormatRequest = () =>
+  apiRequest.get<Blob>('/spm/export/csv', { responseType: 'blob' })
+export const downloadAllCageInfoInPdfFormatRequest = () =>
+  apiRequest.get<Blob>('/spm/export/pdf', { responseType: 'blob' })
 
 export enum FileType {
   CSV = 'csv',
@@ -76,30 +90,34 @@ export enum FileType {
 }
 
 export type ExportCageReportInCsvFormatRequest = {
-  cage_id: string,
-  start_date: string,
-  end_date: string,
-  file_type: FileType,
+  cage_id: string
+  start_date: string
+  end_date: string
+  file_type: FileType
 }
 
-export const exportCageInfoInParticularDateRangeRequest = (payload: ExportCageReportInCsvFormatRequest) => apiRequest.post<Blob>('/spm/report', payload, { responseType: 'blob' })
-
+export const exportCageInfoInParticularDateRangeRequest = (
+  payload: ExportCageReportInCsvFormatRequest,
+) => apiRequest.post<Blob>('/spm/report', payload, { responseType: 'blob' })
 
 export const updateHealthSettingsSuccessResponseSchema = apiSuccessResponseSchema.extend({
   data: z.object({
     temperature: z.number(),
     pressure: z.number(),
-    humidity: z.number()
-  })
+    humidity: z.number(),
+  }),
 })
-
 
 export type HealthSettings = z.infer<typeof updateHealthSettingsSuccessResponseSchema>
 export type UpdateHealthSettingsRequest = {
-  temperature: number,
-  pressure: number,
+  temperature: number
+  pressure: number
   humidity: number
 }
 
-export const getCageHealthSettingsRequest = (cage_id: string) => apiRequest.get<HealthSettings>(`/spm/${cage_id}/health-settings`)
-export const updateHealthSettingsRequest = (payload: UpdateHealthSettingsRequest, cage_id: string) => apiRequest.post<HealthSettings>(`/spm/${cage_id}/health-settings`, payload)
+export const getCageHealthSettingsRequest = (cage_id: string) =>
+  apiRequest.get<HealthSettings>(`/spm/${cage_id}/health-settings`)
+export const updateHealthSettingsRequest = (
+  payload: UpdateHealthSettingsRequest,
+  cage_id: string,
+) => apiRequest.post<HealthSettings>(`/spm/${cage_id}/health-settings`, payload)

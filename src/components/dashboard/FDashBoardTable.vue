@@ -4,8 +4,9 @@ interface FTableProps {
   headerKeyMap?: Record<string, string>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   tableFields: Record<string, any>[]
-  pageSize: number,
-  showTimeFilter?: boolean,
+  totalCageData: number | null
+  pageSize: number
+  showTimeFilter?: boolean
 }
 </script>
 
@@ -16,15 +17,20 @@ import FBtn from '../system/form/FBtn.vue'
 import VueDatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 import { getFriendlyDateLabel } from '@/utils/helper'
+import { storeToRefs } from 'pinia'
 import { useSpmStore } from '@/stores/spm'
 
 const props = defineProps<FTableProps>()
 
 const newSearchFilter = ref<string | null>()
 const newTimeSelectFilter = ref<Date>()
-const { downloadCageInfoInCsvFormat } = useSpmStore()
+const spmStore = useSpmStore()
+const { downloadCageInfoInCsvFormat } = spmStore
+const { currentPage } = storeToRefs(spmStore)
 
 const filteredFields = computed(() => {
+  console.log('The beginning afte the end')
+  console.log(props.tableFields)
   let currentFields = props.tableFields
 
   if (newSearchFilter.value) {
@@ -55,13 +61,12 @@ const readableDate = computed(() => {
   return getFriendlyDateLabel(newTimeSelectFilter.value)
 })
 
-const totalItems = computed(() => filteredFields.value.length)
+const totalItems = computed(() => (props.totalCageData === null ? 0 : props.totalCageData))
 const totalPages = computed(() => Math.ceil(totalItems.value / pageSize))
-
-const currentPage = ref(1)
 const pageSize = props.pageSize
 
 const paginatedFields = computed(() => {
+  console.log(filteredFields)
   const start = (currentPage.value - 1) * pageSize
   const end = start + pageSize
   return filteredFields.value.slice(start, end)
@@ -71,13 +76,13 @@ const handlePageChange = (page: number) => {
   currentPage.value = page
 }
 
-const isExportingCageInfo = ref(false);
+const isExportingCageInfo = ref(false)
 const userDownloadCageInfoInCsv = async () => {
   isExportingCageInfo.value = true
   try {
     await downloadCageInfoInCsvFormat()
-    console.log("downloaded")
-  } catch(error) {
+    console.log('downloaded')
+  } catch (error) {
     console.log(error)
     isExportingCageInfo.value = false
   } finally {
@@ -101,7 +106,11 @@ const userDownloadCageInfoInCsv = async () => {
         </FBtn>
       </div>
     </div>
-    <table class="table">
+    <div class="empty-table-container" v-if="paginatedFields.length === 0">
+      <h2>Empty Content</h2>
+      <p>Refresh to get latest update</p>
+    </div>
+    <table v-else class="table">
       <thead class="header-container">
         <tr>
           <th v-for="(header, index) in props.headers" :key="index" class="headers">
@@ -113,12 +122,8 @@ const userDownloadCageInfoInCsv = async () => {
         <transition-group name="field-transition">
           <tr v-for="(fields, rowIndex) in paginatedFields" :key="rowIndex">
             <td v-for="(header, colIndex) in props.headers" :key="colIndex" class="field">
-              <slot
-                name="field"
-                :field="fields[props.headerKeyMap?.[header] ?? header]"
-                :rowIndex="rowIndex"
-                :colIndex="colIndex"
-              >
+              <slot name="field" :field="fields[props.headerKeyMap?.[header] ?? header]" :rowIndex="rowIndex"
+                :colIndex="colIndex">
                 {{ fields[props.headerKeyMap?.[header] ?? header] }}
               </slot>
             </td>
@@ -126,12 +131,8 @@ const userDownloadCageInfoInCsv = async () => {
         </transition-group>
       </tbody>
     </table>
-    <FTablePagination
-      :currentPage="currentPage"
-      :totalPages="totalPages"
-      @page-changed="handlePageChange"
-      class="f-pagination"
-    />
+    <FTablePagination :current-active-page="currentPage" :totalPages="totalPages" @page-changed="handlePageChange"
+      class="f-pagination" />
   </div>
 </template>
 
@@ -200,6 +201,24 @@ const userDownloadCageInfoInCsv = async () => {
       .f-btn {
         padding: 10px 1.5rem;
       }
+    }
+  }
+
+  .empty-table-container {
+    height: calc(100svh / 3);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    h2 {
+      color: var(--color-brand-primary-900);
+      text-align: center;
+    }
+
+    p {
+      color: var(--color-brand-neutral-700);
+      text-align: center;
     }
   }
 

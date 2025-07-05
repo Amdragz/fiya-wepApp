@@ -23,8 +23,8 @@ import FMobileTable from '@/components/dashboard/FMobileTable.vue'
 import AddCageSuccessModal from '@/components/dashboard/modals/AddCageSuccessModal.vue'
 
 const spmStore = useSpmStore()
-const { addNewCage } = spmStore
-const { cageInfoList } = storeToRefs(spmStore)
+const { addNewCage, totalCageData } = spmStore
+const { cageDataList } = storeToRefs(spmStore)
 
 const { formData, errors, validateForm, debouncedHandleChange } =
   useZodForm<typeof FormSchema.shape>(FormSchema)
@@ -71,7 +71,7 @@ const headerKeyMap: Record<string, string> = {
 }
 
 const tableFields = computed(() => {
-  const tableFields = cageInfoList.value.map((cageInfo) => {
+  const tableFields = cageDataList.value.map((cageInfo) => {
     const dateAdded = formatToHMSdate(cageInfo.created_at)
     const lastUpdated = formatToHMSdate(cageInfo.updated_at)
     return {
@@ -117,12 +117,8 @@ const toggleAddNewCageModal = () => {
       <FBtn class="add-cage-button" @click="toggleAddNewCageModal"> Add cage </FBtn>
       <AddNewCageModal v-model:open-add-cage="openAddNewCageModel" />
       <div class="cage-table">
-        <FDashBoardTable
-          :headers="fieldHeader"
-          :header-key-map="headerKeyMap"
-          :page-size="10"
-          :table-fields="tableFields"
-        >
+        <FDashBoardTable :headers="fieldHeader" :total-cage-data="totalCageData" :header-key-map="headerKeyMap"
+          :page-size="10" :table-fields="tableFields">
           <template #field="{ field, colIndex }">
             <span v-if="colIndex === 0">{{ field.slice(0, 6) }}</span>
             <span v-if="colIndex === 5" class="actions">
@@ -132,7 +128,7 @@ const toggleAddNewCageModal = () => {
             </span>
           </template>
         </FDashBoardTable>
-        <FMobileTable :table-fields="tableFields" :field-mapping="mobileFieldMapping" display-export-button/>
+        <FMobileTable :table-fields="tableFields" :field-mapping="mobileFieldMapping" display-export-button />
       </div>
 
       <div class="form-container">
@@ -143,31 +139,15 @@ const toggleAddNewCageModal = () => {
           </div>
 
           <div class="body">
-            <FInput
-              v-model:model-value="formData.cage_id"
-              label="Cage ID"
-              placeholder="Enter ID"
-              @input="debouncedHandleChange($event, 'cage_id')"
-              :has-error="!!errors.cage_id"
-              :error-message="errors.cage_id"
-            />
-            <FInput
-              v-model.number.trim="formData.livestock_no"
-              label="No of live stock"
-              placeholder="1"
-              type="number"
-              @input="debouncedHandleChange($event, 'livestock_no')"
-              :has-error="!!errors.livestock_no"
-              :error-message="errors.livestock_no"
-            />
-            <FInput
-              v-model:model-value="formData.assigned_monitor"
-              label="Assigned monitor ID"
-              placeholder="Enter ID"
-              @input="debouncedHandleChange($event, 'assigned_monitor')"
-              :has-error="!!errors.assigned_monitor"
-              :error-message="errors.assigned_monitor"
-            />
+            <FInput v-model:model-value="formData.cage_id" label="Cage ID" placeholder="Enter ID"
+              @input="debouncedHandleChange($event, 'cage_id')" :has-error="!!errors.cage_id"
+              :error-message="errors.cage_id" />
+            <FInput v-model.number.trim="formData.livestock_no" label="No of live stock" placeholder="1" type="number"
+              @input="debouncedHandleChange($event, 'livestock_no')" :has-error="!!errors.livestock_no"
+              :error-message="errors.livestock_no" />
+            <FInput v-model:model-value="formData.assigned_monitor" label="Assigned monitor ID" placeholder="Enter ID"
+              @input="debouncedHandleChange($event, 'assigned_monitor')" :has-error="!!errors.assigned_monitor"
+              :error-message="errors.assigned_monitor" />
             <FBtn size="lg" type="submit" :loading="isLoading">Add new cage</FBtn>
           </div>
         </form>
@@ -328,6 +308,7 @@ const toggleAddNewCageModal = () => {
   @include mixins.media-breakpoint('max-width', md) {
     .status-bar {
       position: relative;
+
       .status {
         width: 100%;
         flex-direction: column;
@@ -353,6 +334,7 @@ const toggleAddNewCageModal = () => {
     .cage-page-body {
       .cage-table {
         padding-top: 2.5rem;
+
         .f-table {
           display: none;
         }
