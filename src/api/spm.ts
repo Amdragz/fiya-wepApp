@@ -40,9 +40,11 @@ export type CagePagination = {
 }
 
 export const getUsersCageDataRequest = (pagination: CagePagination) =>
-  apiRequest.post<GetCageDataResponse>('/spm/cages', {
-    page: pagination.page,
-    per_page: pagination.per_page,
+  apiRequest.get<GetCageDataResponse>('/spm/cages', {
+    params: {
+      page: pagination.page,
+      per_page: pagination.per_page,
+    },
   })
 
 export const addCageResponseSchema = apiSuccessResponseSchema.extend({
