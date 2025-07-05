@@ -5,12 +5,13 @@ import {
   exportCageInfoInParticularDateRangeRequest,
   FileType,
   getCageHealthSettingsRequest,
-  getUsersCageInfoRequest,
+  getUsersCageDataRequest,
   updateHealthSettingsRequest,
   type AddCageInfoResponse,
   type AddNewCageRequest,
+  type CagePagination,
   type ExportCageReportInCsvFormatRequest,
-  type GetCageListResponse,
+  type GetCageDataResponse,
   type HealthSettings,
   type UpdateHealthSettingsRequest,
 } from '@/api/spm'
@@ -19,11 +20,14 @@ import { computed, ref } from 'vue'
 
 export const useSpmStore = defineStore('spm', () => {
   const newCage = ref<AddCageInfoResponse['data'] | null>(null)
-  const cageInfoList = ref<GetCageListResponse['data']>([])
+  const totalCageData = ref<number | null>(null)
+  const cageDataList = ref<GetCageDataResponse['data']['cages']>([])
   const healthSettings = ref<HealthSettings['data'] | null>(null)
+  const currentPage = ref<number>(1)
+  const fetchedPages = ref<number[]>([])
 
   const cageHealthInfo = computed(() => {
-    const lastCage = cageInfoList.value[cageInfoList.value.length - 1]
+    const lastCage = cageDataList.value[0]
     if (!lastCage)
       return {
         healthy: 0,
@@ -45,9 +49,15 @@ export const useSpmStore = defineStore('spm', () => {
     return response.data
   }
 
-  async function getUsersCageInfo(): Promise<GetCageListResponse> {
-    const response = await getUsersCageInfoRequest()
-    cageInfoList.value = response.data.data
+  async function getUsersCageData(pagination: CagePagination): Promise<GetCageDataResponse> {
+    const response = await getUsersCageDataRequest(pagination)
+    const cageData = response.data.data.cages
+    totalCageData.value = response.data.data.total_cage_data
+    currentPage.value = pagination.page
+
+    fetchedPages.value.push(currentPage.value)
+    cageDataList.value.push(...cageData)
+
     return response.data
   }
 
@@ -81,7 +91,9 @@ export const useSpmStore = defineStore('spm', () => {
     window.URL.revokeObjectURL(url)
   }
 
-  async function exportCageReportInParticularDateRange(payload: ExportCageReportInCsvFormatRequest) {
+  async function exportCageReportInParticularDateRange(
+    payload: ExportCageReportInCsvFormatRequest,
+  ) {
     const response = await exportCageInfoInParticularDateRangeRequest(payload)
 
     const mimeType = payload.file_type === FileType.PDF ? 'application/pdf' : 'text/csv'
@@ -100,39 +112,41 @@ export const useSpmStore = defineStore('spm', () => {
   }
 
   async function getCageHealthSettings() {
-    if (cageInfoList.value.length === 0) {
-      console.log("cage list info is empty and does not exist")
+    if (cageDataList.value.length === 0) {
+      console.log('cage list info is empty and does not exist')
       return
     }
-    const cage_id = cageInfoList.value[0].cage_id
+    const cage_id = cageDataList.value[0].cage_id
     const response = await getCageHealthSettingsRequest(cage_id)
     healthSettings.value = response.data.data
     return response.data
   }
 
   async function updateHealthSettings(payload: UpdateHealthSettingsRequest) {
-    if (cageInfoList.value.length === 0) {
-      console.log("cage list info is empty and does not exist")
+    if (cageDataList.value.length === 0) {
+      console.log('cage list info is empty and does not exist')
       return
     }
-    const cage_id = cageInfoList.value[0].cage_id
+    const cage_id = cageDataList.value[0].cage_id
     const response = await updateHealthSettingsRequest(payload, cage_id)
     healthSettings.value = response.data.data
     return response.data
   }
 
-
   return {
     newCage,
-    cageInfoList,
+    cageDataList,
     cageHealthInfo,
     healthSettings,
     addNewCage,
-    getUsersCageInfo,
+    getUsersCageData,
     downloadCageInfoInCsvFormat,
     downloadCageInfoInPdfFormat,
     exportCageReportInParticularDateRange,
     getCageHealthSettings,
     updateHealthSettings,
+    totalCageData,
+    currentPage,
+    fetchedPages,
   }
 })

@@ -10,13 +10,16 @@ onMounted(() => {
   fetchUsersCageInfo()
 })
 
-const { getUsersCageInfo, getCageHealthSettings } = useSpmStore()
+const { getUsersCageData, getCageHealthSettings } = useSpmStore()
 const isLoading = ref<boolean>(false)
 
 const fetchUsersCageInfo = async () => {
   try {
     isLoading.value = true
-    await getUsersCageInfo()
+    await getUsersCageData({
+      page: 1,
+      per_page: 10,
+    })
     await getCageHealthSettings()
   } catch (error) {
     console.log(error)

@@ -15,7 +15,7 @@ import { FileType } from '@/api/spm'
 import { formatISO } from 'date-fns'
 import { useSpmStore } from '@/stores/spm'
 
-const { exportCageReportInParticularDateRange, cageInfoList } = useSpmStore()
+const { exportCageReportInParticularDateRange, cageDataList } = useSpmStore()
 
 onMounted(() => {
   const endDate = new Date()
@@ -55,13 +55,13 @@ const isLoading = ref(false)
 
 const exportUserCageReportInParticularDateRange = async () => {
   try {
-    if (cageInfoList === null) return
-    console.log(cageInfoList[0].cage_id);
+    if (cageDataList === null) return
+    console.log(cageDataList[0].cage_id)
     await exportCageReportInParticularDateRange({
-      cage_id: cageInfoList[0].cage_id,
+      cage_id: cageDataList[0].cage_id,
       start_date: reportFormData.value.start_date,
       end_date: reportFormData.value.end_date,
-      file_type: reportFormData.value.file_type as FileType
+      file_type: reportFormData.value.file_type as FileType,
     })
   } catch (error) {
     console.log(error)
@@ -81,12 +81,8 @@ const exportUserCageReportInParticularDateRange = async () => {
           <p>Select date</p>
           <VueDatePicker v-model="date" range enable-time-picker />
         </div>
-        <FSelect
-          label="File type"
-          v-model="reportFormData.file_type"
-          placeholder="Select file type"
-          :options="[FileType.CSV, FileType.PDF]"
-        />
+        <FSelect label="File type" v-model="reportFormData.file_type" placeholder="Select file type"
+          :options="[FileType.CSV, FileType.PDF]" />
         <FBtn :loading="isLoading" type="submit" size="lg">Add new cage</FBtn>
       </form>
     </div>
