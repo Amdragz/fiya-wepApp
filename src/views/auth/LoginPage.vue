@@ -60,11 +60,7 @@ const loginUser = async () => {
 
         <div class="body">
           <FInput type="email" v-model="formData.email" placeholder="Enter email" label="Email" />
-          <FPasswordInput
-            v-model:model-value="formData.password"
-            placeholder="Enter password"
-            label="Password"
-          />
+          <FPasswordInput v-model:model-value="formData.password" placeholder="Enter password" label="Password" />
           <FBtn size="lg" full-width :loading="isLoading" @click="loginUser">Login</FBtn>
         </div>
       </FContainer>
@@ -73,9 +69,11 @@ const loginUser = async () => {
 </template>
 
 <style lang="scss" scoped>
+@use '@/assets/scss/abstracts/mixins';
+
 .login-form-page {
   width: 100%;
-  height: 100vh;
+  height: 100svh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -131,6 +129,12 @@ const loginUser = async () => {
           margin-top: 0.5rem;
         }
       }
+    }
+  }
+
+  @include mixins.media-breakpoint('max-width', sm) {
+    .login-form {
+      padding: 3rem 1.5rem 4.5rem;
     }
   }
 }
