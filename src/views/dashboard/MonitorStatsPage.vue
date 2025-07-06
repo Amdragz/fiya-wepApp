@@ -181,7 +181,8 @@ const mobileFieldMapping = ['cage_id', 'timestamp', 'health_score', '']
         </template>
       </FDashBoardTable>
 
-      <FMobileTable :table-fields="tableFields" :field-mapping="mobileFieldMapping" display-export-button />
+      <FMobileTable :table-fields="tableFields" :field-mapping="mobileFieldMapping" :total-cage-data="totalCageData"
+        display-health display-export-button />
     </div>
   </div>
 </template>

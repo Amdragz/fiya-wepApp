@@ -167,7 +167,7 @@ const userDownloadCageInfoInCsv = async () => {
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 225px;
+        width: 100%;
         gap: 0.5rem;
         background-color: #f0f2f5;
         border: 1px solid #e4e7ec;

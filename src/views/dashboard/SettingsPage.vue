@@ -68,14 +68,14 @@ const updateUserCageHealthSettings = async () => {
 
 .settings-page {
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   padding: 1rem;
   background-color: var(--color-brand-neutral-200);
 
   .settings-page-container {
     border-radius: 0.5rem;
     padding-bottom: 3rem;
-    height: 100%;
+    height: 100svh;
     background-color: var(--color-white);
 
     .header {
