@@ -128,7 +128,8 @@ const toggleAddNewCageModal = () => {
             </span>
           </template>
         </FDashBoardTable>
-        <FMobileTable :table-fields="tableFields" :field-mapping="mobileFieldMapping" display-export-button />
+        <FMobileTable :table-fields="tableFields" :field-mapping="mobileFieldMapping" :total-cage-data="totalCageData"
+          display-export-button />
       </div>
 
       <div class="form-container">

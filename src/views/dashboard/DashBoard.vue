@@ -60,7 +60,7 @@ const fetchUsersCageInfo = async () => {
 
 .main-page {
   background-color: var(--color-brand-neutral-200);
-  height: 100svh;
+  min-height: 100svh;
 
   .fiya-main-loader-container {
     padding: 1rem;

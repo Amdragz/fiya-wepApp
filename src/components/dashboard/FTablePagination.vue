@@ -72,7 +72,7 @@ const changePage = async (page: number) => {
     </button>
 
     <button v-for="page in totalPages" :key="page" @click="changePage(page)"
-      :class="['page-button', { active: currentPage === page }]">
+      :class="['page-button', { active: currentActivePage === page }]">
       <FSpinner v-if="loadingPage === page" color="green" :size="16" />
       <span v-else>
         {{ page }}
