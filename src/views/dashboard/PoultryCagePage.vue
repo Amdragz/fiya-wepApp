@@ -23,7 +23,7 @@ import FMobileTable from '@/components/dashboard/FMobileTable.vue'
 import AddCageSuccessModal from '@/components/dashboard/modals/AddCageSuccessModal.vue'
 
 const spmStore = useSpmStore()
-const { addNewCage, totalCageData } = spmStore
+const { addNewCage, totalCageData, refreshUsersCageData } = spmStore
 const { cageDataList } = storeToRefs(spmStore)
 
 const { formData, errors, validateForm, debouncedHandleChange } =
@@ -94,6 +94,19 @@ const showSuccessModal = ref(false)
 const toggleAddNewCageModal = () => {
   openAddNewCageModel.value = true
 }
+
+const isRefreshing = ref(false)
+const refreshCageDataList = async () => {
+  try {
+    isRefreshing.value = true
+    await refreshUsersCageData()
+  } catch (error) {
+    isRefreshing.value = false
+    console.log(error)
+  } finally {
+    isRefreshing.value = false
+  }
+}
 </script>
 
 <template>
@@ -107,8 +120,8 @@ const toggleAddNewCageModal = () => {
         <div class="divider"></div>
         <p>Unavailable monitor score: 0%</p>
       </div>
-      <button class="refresh">
-        <FIcon :width="20" :height="20" :icon-path="iconRefresh" />
+      <button @click="refreshCageDataList" class="refresh">
+        <FIcon :width="20" :height="20" :icon-path="iconRefresh" :class="{ 'spin-animation': isRefreshing }" />
         <p>Refresh</p>
       </button>
     </div>
@@ -213,6 +226,20 @@ const toggleAddNewCageModal = () => {
         stroke-linecap: 'round';
         stroke-linejoin: 'round';
         stroke-dasharray: '3 3';
+
+        @keyframes spin {
+          0% {
+            transform: rotate(0deg);
+          }
+
+          100% {
+            transform: rotate(360deg);
+          }
+        }
+
+        &.spin-animation {
+          animation: spin 1s linear infinite;
+        }
       }
 
       p {

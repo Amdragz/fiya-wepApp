@@ -59,6 +59,20 @@ export const useSpmStore = defineStore('spm', () => {
     return response.data
   }
 
+  async function refreshUsersCageData(): Promise<GetCageDataResponse> {
+    const response = await getUsersCageDataRequest({ offset: 0, limit: 30 })
+    const { cages, total_cage_data } = response.data.data
+
+    totalCageData.value = total_cage_data
+    cageDataList.value = cages
+
+    console.log(cageDataList.value)
+    currentPage.value = 3
+    fetchedPages.value = [1, 2, 3]
+
+    return response.data
+  }
+
   async function downloadCageInfoInCsvFormat(): Promise<void> {
     const response = await downloadAllCageInfoInCsvFormatRequest()
 
@@ -143,6 +157,7 @@ export const useSpmStore = defineStore('spm', () => {
     exportCageReportInParticularDateRange,
     getCageHealthSettings,
     updateHealthSettings,
+    refreshUsersCageData,
     totalCageData,
     currentPage,
     fetchedPages,
