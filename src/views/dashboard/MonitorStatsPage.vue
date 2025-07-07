@@ -43,10 +43,11 @@ import type { CageInfo } from '@/api/spm'
 import { storeToRefs } from 'pinia'
 import { formatToHMS } from '@/utils/helper'
 import FMobileTable from '@/components/dashboard/FMobileTable.vue'
+import { ref } from 'vue'
 
 const spmStore = useSpmStore()
 const { cageDataList, totalCageData } = storeToRefs(spmStore)
-const { cageHealthInfo, healthSettings } = spmStore
+const { cageHealthInfo, healthSettings, refreshUsersCageData } = spmStore
 
 function flattenObjectRecognition(obj: CageInfo): TableFields {
   return {
@@ -143,6 +144,19 @@ const headerKeyMap: Record<string, string> = {
 }
 
 const mobileFieldMapping = ['cage_id', 'timestamp', 'health_score', '']
+
+const isRefreshing = ref(false)
+const refreshCageDataList = async () => {
+  try {
+    isRefreshing.value = true
+    await refreshUsersCageData()
+  } catch (error) {
+    isRefreshing.value = false
+    console.log(error)
+  } finally {
+    isRefreshing.value = false
+  }
+}
 </script>
 
 <template>
@@ -155,8 +169,8 @@ const mobileFieldMapping = ['cage_id', 'timestamp', 'health_score', '']
         <div class="divider"></div>
         <p>Unavailable monitor score: {{ cageHealthInfo.unAvailableMonitors }}%</p>
       </div>
-      <button class="refresh">
-        <FIcon :width="20" :height="20" :icon-path="iconRefresh" />
+      <button @click="refreshCageDataList" class="refresh">
+        <FIcon :width="20" :height="20" :icon-path="iconRefresh" :class="{ 'spin-animation': isRefreshing }" />
         <p>Refresh</p>
       </button>
     </div>
@@ -243,6 +257,20 @@ const mobileFieldMapping = ['cage_id', 'timestamp', 'health_score', '']
         stroke-linecap: 'round';
         stroke-linejoin: 'round';
         stroke-dasharray: '3 3';
+
+        @keyframes spin {
+          0% {
+            transform: rotate(0deg);
+          }
+
+          100% {
+            transform: rotate(360deg);
+          }
+        }
+
+        &.spin-animation {
+          animation: spin 1s linear infinite;
+        }
       }
 
       p {
