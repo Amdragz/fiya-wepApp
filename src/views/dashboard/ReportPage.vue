@@ -56,12 +56,13 @@ const isLoading = ref(false)
 const exportUserCageReportInParticularDateRange = async () => {
   try {
     if (cageDataList === null) return
+    isLoading.value = true
     console.log(cageDataList[0].cage_id)
     await exportCageReportInParticularDateRange({
       cage_id: cageDataList[0].cage_id,
       start_date: reportFormData.value.start_date,
       end_date: reportFormData.value.end_date,
-      file_type: reportFormData.value.file_type as FileType,
+      file_type: FileType.CSV as FileType,
     })
   } catch (error) {
     console.log(error)
@@ -83,7 +84,7 @@ const exportUserCageReportInParticularDateRange = async () => {
         </div>
         <FSelect label="File type" v-model="reportFormData.file_type" placeholder="Select file type"
           :options="[FileType.CSV, FileType.PDF]" />
-        <FBtn :loading="isLoading" type="submit" size="lg">Add new cage</FBtn>
+        <FBtn :loading="isLoading" type="submit" size="lg">Export report</FBtn>
       </form>
     </div>
   </div>

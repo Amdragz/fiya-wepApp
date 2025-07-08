@@ -6,6 +6,7 @@ interface FMobileTableProps<T = any> {
   fieldMapping: string[]
   displayExportButton: boolean
   displayHealth?: boolean
+  displayDateTime?: boolean
 }
 </script>
 
@@ -14,6 +15,7 @@ import { iconHoriz2 } from '@/assets/images/icons'
 import FIcon from '../system/common/FIcon.vue'
 import FBtn from '../system/form/FBtn.vue'
 import FTablePagination from './FTablePagination.vue'
+import { formatToDMYandHMS } from '@/utils/helper'
 import { ref } from 'vue'
 import { useSpmStore } from '@/stores/spm'
 import { computed } from 'vue'
@@ -62,14 +64,21 @@ const handlePageChange = (page: number) => {
           <slot name="row1" :field="field">
             <div class="row1">
               <p>{{ field[fieldMapping[0]].slice(0, 6) }}</p>
-              <p>{{ field[fieldMapping[1]] }}</p>
+              <p>
+                <span v-if="displayHealth" class="health-score">Health: </span>
+                {{ field[fieldMapping[1]] }}
+              </p>
             </div>
           </slot>
           <slot name="row2" :field="field">
             <div class="row2">
               <p>
-                <span v-if="displayHealth" class="health-score">Health: </span>
-                {{ field[fieldMapping[2]] }}
+                <span v-if="displayDateTime">
+                  {{ formatToDMYandHMS(field[fieldMapping[2]]) }}
+                </span>
+                <span v-else>
+                  {{ field[fieldMapping[2]] }}
+                </span>
               </p>
               <div class="actions">
                 <button>
@@ -136,6 +145,12 @@ const handlePageChange = (page: number) => {
           p {
             font-size: 0.875rem;
             font-weight: 400;
+
+            .health-score {
+              font-weight: 600;
+              margin-right: 0.5rem;
+              color: var(--color-brand-primary-600);
+            }
           }
         }
 
@@ -143,12 +158,6 @@ const handlePageChange = (page: number) => {
           p {
             font-size: 0.875rem;
             font-weight: 400;
-
-            .health-score {
-              font-weight: 600;
-              margin-right: 0.5rem;
-              color: var(--color-brand-primary-600);
-            }
           }
 
           .actions {

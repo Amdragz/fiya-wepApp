@@ -41,7 +41,7 @@ import FDashBoardTable from '@/components/dashboard/FDashBoardTable.vue'
 import { useSpmStore } from '@/stores/spm'
 import type { CageInfo } from '@/api/spm'
 import { storeToRefs } from 'pinia'
-import { formatToHMS } from '@/utils/helper'
+import { formatToDMYandHMS } from '@/utils/helper'
 import FMobileTable from '@/components/dashboard/FMobileTable.vue'
 import { ref } from 'vue'
 
@@ -143,7 +143,7 @@ const headerKeyMap: Record<string, string> = {
   'Health score': 'health_score',
 }
 
-const mobileFieldMapping = ['cage_id', 'timestamp', 'health_score', '']
+const mobileFieldMapping = ['cage_id', 'health_score', 'timestamp', '']
 
 const isRefreshing = ref(false)
 const refreshCageDataList = async () => {
@@ -190,13 +190,13 @@ const refreshCageDataList = async () => {
             {{ field.slice(0, 6) }}
           </span>
           <span v-if="colIndex === 1">
-            {{ formatToHMS(field) }}
+            {{ formatToDMYandHMS(field) }}
           </span>
         </template>
       </FDashBoardTable>
 
       <FMobileTable :table-fields="tableFields" :field-mapping="mobileFieldMapping" :total-cage-data="totalCageData"
-        display-health display-export-button />
+        display-date-time display-health display-export-button />
     </div>
   </div>
 </template>
